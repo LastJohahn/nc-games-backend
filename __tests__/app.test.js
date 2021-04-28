@@ -2,15 +2,21 @@ const request = require("supertest");
 const { seed } = require("../db/seeds/seed.js");
 const testData = require("../db/data/test-data/index.js");
 const db = require("../db/connection.js");
-const { dropTables, createTables } = require("../db/manage-tables.js");
 const app = require("../app.js");
 
 beforeEach(() => {
   return seed(testData);
 });
 
-afterAll(() => {
-  return db.end();
+describe("REQUEST TO /[invalid endpoint]", () => {
+  test('should return status:404 and a "route not found" message', () => {
+    return request(app)
+      .get("/ap")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toEqual({ msg: "route not found" });
+      });
+  });
 });
 
 describe("GET /api/categories", () => {
@@ -36,4 +42,8 @@ describe("GET /api/categories", () => {
         ]);
       });
   });
+});
+
+afterAll(() => {
+  return db.end();
 });
