@@ -1,8 +1,8 @@
 const express = require("express");
-const categoryRouter = require("./category.router.js");
+const categoriesRouter = require("./categories.router.js");
 
 const apiRouter = express.Router();
 
-apiRouter.use("/categories", categoryRouter);
+apiRouter.use("/categories", categoriesRouter);
 
 module.exports = apiRouter;
