@@ -20,7 +20,7 @@ describe("REQUEST TO /[invalid endpoint]", () => {
 });
 
 describe("GET /api/categories", () => {
-  test("status: 200 responds with a JSON object containing the categories", () => {
+  test("status: 200 responds with a JSON object containing the categories as an array attached to a categories: key", () => {
     return request(app)
       .get("/api/categories")
       .expect(200)
@@ -40,6 +40,17 @@ describe("GET /api/categories", () => {
             description: "Games suitable for children",
           },
         ]);
+      });
+  });
+});
+
+describe("GET /api/reviews/:review_id", () => {
+  test("status: 200 responds with an object", () => {
+    return request(app)
+      .get("/api/reviews/2")
+      .expect(200)
+      .then((response) => {
+        expect(typeof response.body).toBe("object");
       });
   });
 });
