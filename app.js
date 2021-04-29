@@ -4,6 +4,7 @@ const {
   handleInternalServerError,
   handleInvalidParam,
   handleCustomErrors,
+  handleInvalidSortQuery,
 } = require("./server/controllers/errors.controller.js");
 const apiRouter = require("./server/routers/api.router.js");
 
@@ -15,6 +16,7 @@ app.use("/api", apiRouter);
 app.all("/*", handleInvalidRouteErrors);
 
 app.use(handleCustomErrors);
+app.use(handleInvalidSortQuery);
 app.use(handleInvalidParam);
 app.use(handleInternalServerError);
 

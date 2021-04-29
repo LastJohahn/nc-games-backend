@@ -188,6 +188,79 @@ describe("PATCH /api/reviews/:review_id", () => {
   });
 });
 
+describe.only("GET /api/reviews?", () => {
+  test("status: 200 responds with a list of all reviews when requested without queries", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.reviews.length).toBe(13);
+      });
+  });
+  test("status: 200 all reviews have their native keys", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        for (let i = 0; i < body.reviews.length; i++) {
+          expect(body.reviews[i]).toHaveProperty("review_id");
+          expect(body.reviews[i]).toHaveProperty("title");
+          expect(body.reviews[i]).toHaveProperty("review_body");
+          expect(body.reviews[i]).toHaveProperty("designer");
+          expect(body.reviews[i]).toHaveProperty("review_img_url");
+          expect(body.reviews[i]).toHaveProperty("votes");
+          expect(body.reviews[i]).toHaveProperty("category");
+          expect(body.reviews[i]).toHaveProperty("owner");
+          expect(body.reviews[i]).toHaveProperty("created_at");
+        }
+      });
+  });
+  test("status: 200 all reviews should also include a comment_count representing all the comments associated with its review id", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        reviews.forEach((review) => {
+          expect(review).toHaveProperty("comment_count");
+          if (review.review_id === 4) {
+            expect(review.comment_count).toBe(0);
+          }
+        });
+      });
+  });
+  test("status: 200 if no sort_by query is passed in, default sorts by date", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews[0].review_id).toBe(13);
+        expect(reviews[5].review_id).toBe(9);
+        expect(reviews[12].review_id).toBe(7);
+      });
+  });
+  test("status: 200 sorts by any valid column name if passed in as sort_by query", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=designer")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews[0].review_id).toBe(3);
+        expect(reviews[5].review_id).toBe(4);
+        expect(reviews[12].review_id).toBe(9);
+      });
+  });
+  test("status:400 returns an error message when passed a sort_by query that does not correspond to a column name", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=desogner")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid sort_by query");
+      });
+  });
+});
+
 afterAll(() => {
   return db.end();
 });

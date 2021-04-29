@@ -1,5 +1,18 @@
 const db = require("../../db/connection.js");
 
+// err handling for invalid sort_by query! 42703
+exports.selectReviews = async (sort_by = "created_at", order, category) => {
+  const { rows } = await db.query(
+    `
+  SELECT reviews.*, COUNT(comments.comment_id)::int AS comment_count FROM reviews
+  LEFT JOIN comments ON comments.review_id = reviews.review_id
+  GROUP BY reviews.review_id
+  ORDER BY reviews.${sort_by}; 
+  `
+  );
+  return rows;
+};
+
 exports.selectReviewById = async (review_id) => {
   const { rows } = await db.query(
     `
