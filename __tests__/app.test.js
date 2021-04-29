@@ -154,6 +154,38 @@ describe("PATCH /api/reviews/:review_id", () => {
         expect(body.review[0].votes).toBe(4);
       });
   });
+  test("status: 200 responds with the updated review object even if unrelated info is sent along with inc_votes in the patch request", () => {
+    const newVotes = { inc_votes: 4, name: "Mitch" };
+    return request(app)
+      .patch("/api/reviews/2")
+      .send(newVotes)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.review[0].votes).toBe(9);
+      });
+  });
+  test("status: 422 responds with a message indication that inc_votes is needed to update votes when passed a patch request without inc_votes", () => {
+    const newVotes = {};
+    return request(app)
+      .patch("/api/reviews/3")
+      .send(newVotes)
+      .expect(422)
+      .then(({ body }) => {
+        expect(body.msg).toBe(
+          "Please provide a number to alter the votes count by"
+        );
+      });
+  });
+  test("status: 400 responds with a message indicating that inc_votes should be a number when passed inc_votes with something that is not one", () => {
+    const newVotes = { inc_votes: "cat" };
+    return request(app)
+      .patch("/api/reviews/4")
+      .send(newVotes)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid request parameter");
+      });
+  });
 });
 
 afterAll(() => {

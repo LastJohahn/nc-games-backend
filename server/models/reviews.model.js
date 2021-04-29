@@ -17,6 +17,12 @@ exports.selectReviewById = async (review_id) => {
 };
 
 exports.patchReviewVotesById = async (review_id, inc_votes) => {
+  if (inc_votes === undefined) {
+    return Promise.reject({
+      status: 422,
+      msg: "Please provide a number to alter the votes count by",
+    });
+  }
   const { rows } = await db.query(
     `
   UPDATE reviews
