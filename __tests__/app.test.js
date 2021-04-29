@@ -235,20 +235,42 @@ describe.only("GET /api/reviews?", () => {
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
-        expect(reviews[0].review_id).toBe(13);
+        expect(reviews[0].review_id).toBe(7);
         expect(reviews[5].review_id).toBe(9);
-        expect(reviews[12].review_id).toBe(7);
+        expect(reviews[12].review_id).toBe(13);
       });
   });
   test("status: 200 sorts by any valid column name if passed in as sort_by query", () => {
     return request(app)
-      .get("/api/reviews?sort_by=designer")
+      .get("/api/reviews?sort_by=designer&order=ASC")
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
         expect(reviews[0].review_id).toBe(3);
         expect(reviews[5].review_id).toBe(4);
         expect(reviews[12].review_id).toBe(9);
+      });
+  });
+  test("status: 200 default sort order is descending if not specified", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews[0].review_id).toBe(7);
+        expect(reviews[5].review_id).toBe(9);
+        expect(reviews[12].review_id).toBe(13);
+      });
+  });
+  test("status: 200 can specify sort order to be ASC", () => {
+    return request(app)
+      .get("/api/reviews?order=ASC")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews[0].review_id).toBe(13);
+        expect(reviews[5].review_id).toBe(9);
+        expect(reviews[12].review_id).toBe(7);
       });
   });
   test("status:400 returns an error message when passed a sort_by query that does not correspond to a column name", () => {
