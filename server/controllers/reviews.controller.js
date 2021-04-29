@@ -1,7 +1,8 @@
 const { selectReviewById } = require("../models/reviews.model");
 
 exports.getReviewById = (req, res) => {
-  selectReviewById().then((review) => {
+  const { review_id } = req.params;
+  selectReviewById(review_id).then((review) => {
     res.status(200).send({ review });
   });
 };
