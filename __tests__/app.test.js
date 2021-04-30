@@ -273,6 +273,28 @@ describe.only("GET /api/reviews?", () => {
         expect(reviews[12].review_id).toBe(7);
       });
   });
+  test("status: 200 can specify sort order to be DESC", () => {
+    return request(app)
+      .get("/api/reviews?order=DESC")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews[0].review_id).toBe(7);
+        expect(reviews[5].review_id).toBe(9);
+        expect(reviews[12].review_id).toBe(13);
+      });
+  });
+  test("status: 200 accepts a valid column name for category and filters accordingly", () => {
+    return request(app)
+      .get("/api/reviews?category=social%20deduction")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        reviews.forEach((review) => {
+          expect(review.category).toBe("social deduction");
+        });
+      });
+  });
   test("status: 400 error message if  sent order query that is not valid", () => {
     return request(app)
       .get("/api/reviews?order=ASDFGL")
