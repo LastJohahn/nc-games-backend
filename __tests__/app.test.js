@@ -273,6 +273,14 @@ describe.only("GET /api/reviews?", () => {
         expect(reviews[12].review_id).toBe(7);
       });
   });
+  test("status: 400 error message if  sent order query that is not valid", () => {
+    return request(app)
+      .get("/api/reviews?order=ASDFGL")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Please provide a valid order query");
+      });
+  });
   test("status:400 returns an error message when passed a sort_by query that does not correspond to a column name", () => {
     return request(app)
       .get("/api/reviews?sort_by=desogner")

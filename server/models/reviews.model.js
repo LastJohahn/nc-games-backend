@@ -1,20 +1,26 @@
 const db = require("../../db/connection.js");
 
-// err handling for invalid sort_by query! 42703
 exports.selectReviews = async (
   sort_by = "created_at",
   order = "DESC",
   category
 ) => {
-  const { rows } = await db.query(
-    `
+  if (order === "DESC" || order === "ASC") {
+    const { rows } = await db.query(
+      `
   SELECT reviews.*, COUNT(comments.comment_id)::int AS comment_count FROM reviews
   LEFT JOIN comments ON comments.review_id = reviews.review_id
   GROUP BY reviews.review_id
   ORDER BY reviews.${sort_by} ${order}; 
   `
-  );
-  return rows;
+    );
+    return rows;
+  } else {
+    return Promise.reject({
+      status: 400,
+      msg: "Please provide a valid order query",
+    });
+  }
 };
 
 exports.selectReviewById = async (review_id) => {
