@@ -295,6 +295,23 @@ describe.only("GET /api/reviews?", () => {
         });
       });
   });
+  test("status: 200 and an empty array when passed a valid column name for category that does not have any reviews associated with it", () => {
+    return request(app)
+      .get("/api/reviews?category=children%27s%20games")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews.length).toBe(0);
+      });
+  });
+  test("status: 400 and error message if sent category query that is not valid", () => {
+    return request(app)
+      .get("/api/reviews?category=banana")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Please provide a valid category query");
+      });
+  });
   test("status: 400 error message if  sent order query that is not valid", () => {
     return request(app)
       .get("/api/reviews?order=ASDFGL")
