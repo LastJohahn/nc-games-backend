@@ -66,6 +66,36 @@ describe("makeReference", () => {
     ];
     expect(makeReference(input)).toEqual({ Agricola: 1, Jenga: 2 });
   });
+  test("leaves original input unmodified", () => {
+    const input = [
+      {
+        review_id: 1,
+        title: "Agricola",
+        designer: "Uwe Rosenberg",
+        owner: "mallionaire",
+        review_body: "Farmyard fun!",
+        category: "euro game",
+        created_at: 1610964020514,
+        votes: 1,
+        review_img_url:
+          "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+      },
+      {
+        review_id: 2,
+        title: "Jenga",
+        designer: "Leslie Scott",
+        owner: "philippaclaire9",
+        review_body: "Fiddly fun for all the family",
+        category: "dexterity",
+        created_at: 1610964101251,
+        votes: 5,
+        review_img_url:
+          "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+      },
+    ];
+    makeReference(input);
+    expect(input).toBe(input);
+  });
 });
 describe("idFetcher", () => {
   test("returns a new array of objects", () => {
@@ -110,7 +140,7 @@ describe("idFetcher", () => {
     ]);
   });
 });
-describe.only("categoriesLookup", () => {
+describe("categoriesLookup", () => {
   test("should return an array", () => {
     return categoriesLookup().then((result) => {
       expect(Array.isArray(result)).toBe(true);
