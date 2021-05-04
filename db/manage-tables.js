@@ -20,9 +20,8 @@ const createTables = () => {
         `);
     })
     .then(() => {
-      return db
-        .query(
-          `
+      return db.query(
+        `
         CREATE TABLE reviews (
             review_id SERIAL PRIMARY KEY,
             title VARCHAR(250) NOT NULL,
@@ -35,20 +34,20 @@ const createTables = () => {
             created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
         )
         `
+      );
+    })
+    .then(() => {
+      return db.query(`
+        CREATE TABLE comments(
+            comment_id SERIAL PRIMARY KEY,
+            author VARCHAR(150) REFERENCES users(username) NOT NULL,
+            review_id INT REFERENCES reviews(review_id) ON DELETE CASCADE,
+            votes INT DEFAULT 0,
+            created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+            body VARCHAR(300) NOT NULL
         )
-        .then(() => {
-          return db.query(`
-            CREATE TABLE comments(
-                comment_id SERIAL PRIMARY KEY,
-                author VARCHAR(150) REFERENCES users(username) NOT NULL,
-                review_id INT REFERENCES reviews(review_id) ON DELETE CASCADE,
-                votes INT DEFAULT 0,
-                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-                body VARCHAR(300) NOT NULL
-            )
-            
-            `);
-        });
+        
+        `);
     });
 };
 
