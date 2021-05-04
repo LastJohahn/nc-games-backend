@@ -188,7 +188,7 @@ describe("PATCH /api/reviews/:review_id", () => {
   });
 });
 
-describe.only("GET /api/reviews?", () => {
+describe("GET /api/reviews?", () => {
   test("status: 200 responds with a list of all reviews when requested without queries", () => {
     return request(app)
       .get("/api/reviews")
@@ -221,6 +221,7 @@ describe.only("GET /api/reviews?", () => {
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
+        expect(reviews.length).toBeGreaterThan(0);
         reviews.forEach((review) => {
           expect(review).toHaveProperty("comment_count");
           if (review.review_id === 4) {
@@ -290,6 +291,7 @@ describe.only("GET /api/reviews?", () => {
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
+        expect(reviews.length).toBeGreaterThan(0);
         reviews.forEach((review) => {
           expect(review.category).toBe("social deduction");
         });
