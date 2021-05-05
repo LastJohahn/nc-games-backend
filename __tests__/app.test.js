@@ -383,7 +383,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
   });
 });
 
-describe.only("POST /api/reviews/:review_id/comments", () => {
+describe("POST /api/reviews/:review_id/comments", () => {
   test("status: 201 responds with posted comment", () => {
     const commentToSend = {
       username: "mallionaire",
@@ -418,6 +418,19 @@ describe.only("POST /api/reviews/:review_id/comments", () => {
         expect(body.msg).toBe(
           "Username not recognised, please provide a user from the database"
         );
+      });
+  });
+  test("status: 404 responds with an error message when attempting to post to a review id that does not exist ", () => {
+    const commentToSend = {
+      username: "mallionaire",
+      body: "I played Catan before it was cool!",
+    };
+    return request(app)
+      .post("/api/reviews/413/comments")
+      .send(commentToSend)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No review with this id found");
       });
   });
 });

@@ -6,6 +6,7 @@ const {
   handleCustomErrors,
   handleInvalidSortQuery,
   handleInvalidUsername,
+  handleInvalidReviewId,
 } = require("./server/controllers/errors.controller.js");
 const apiRouter = require("./server/routers/api.router.js");
 
@@ -20,6 +21,7 @@ app.use(handleCustomErrors);
 app.use(handleInvalidSortQuery);
 app.use(handleInvalidParam);
 app.use(handleInvalidUsername);
+app.use(handleInvalidReviewId);
 app.use(handleInternalServerError);
 
 module.exports = app;
