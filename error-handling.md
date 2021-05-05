@@ -58,7 +58,9 @@ Bear in mind, handling bad inputs from clients doesn't necessarily have to lead 
 
 ### POST `/api/reviews/:review_id/comments`
 
--
+- invalid username
+- invalid review id (eg dog)
+- review id that does not exist (700)
 
 ### GET `/api/reviews/:review_id/comments`
 

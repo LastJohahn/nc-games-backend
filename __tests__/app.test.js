@@ -405,6 +405,21 @@ describe.only("POST /api/reviews/:review_id/comments", () => {
         expect(comment[0].body).toBe("I played Catan before it was cool!");
       });
   });
+  test("status: 422 responds with an error message when trying to post a comment with a username that isn't in users", () => {
+    const commentToSend = {
+      username: "calvinofcalvinandhobbesfame",
+      body: "I played Catan before it was cool!",
+    };
+    return request(app)
+      .post("/api/reviews/13/comments")
+      .send(commentToSend)
+      .expect(422)
+      .then(({ body }) => {
+        expect(body.msg).toBe(
+          "Username not recognised, please provide a user from the database"
+        );
+      });
+  });
 });
 
 afterAll(() => {

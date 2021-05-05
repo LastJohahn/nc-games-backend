@@ -21,6 +21,18 @@ exports.handleInvalidSortQuery = (err, req, res, next) => {
 exports.handleInvalidParam = (err, req, res, next) => {
   if (err.code === "22P02") {
     res.status(400).send({ msg: "Invalid request parameter" });
+  } else {
+    next(err);
+  }
+};
+
+exports.handleInvalidUsername = (err, req, res, next) => {
+  if (err.code === "23503") {
+    res.status(422).send({
+      msg: "Username not recognised, please provide a user from the database",
+    });
+  } else {
+    next(err);
   }
 };
 
