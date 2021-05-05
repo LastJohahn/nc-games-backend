@@ -58,12 +58,12 @@ Bear in mind, handling bad inputs from clients doesn't necessarily have to lead 
 
 ### POST `/api/reviews/:review_id/comments`
 
-- invalid review_id
-- no comments associated with that review
+-
 
 ### GET `/api/reviews/:review_id/comments`
 
--
+- invalid review_id
+- no comments associated with that review
 
 ### GET `/api/reviews`
 

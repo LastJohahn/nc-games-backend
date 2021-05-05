@@ -332,7 +332,7 @@ describe("GET /api/reviews?", () => {
   });
 });
 
-describe.only("GET /api/reviews/:review_id/comments", () => {
+describe("GET /api/reviews/:review_id/comments", () => {
   test("status: 200 responds with a list of comments associated with that review id", () => {
     return request(app)
       .get("/api/reviews/2/comments")
@@ -379,6 +379,30 @@ describe.only("GET /api/reviews/:review_id/comments", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid request parameter");
+      });
+  });
+});
+
+describe.only("POST /api/reviews/:review_id/comments", () => {
+  test("status: 201 responds with posted comment", () => {
+    const commentToSend = {
+      username: "mallionaire",
+      body: "I played Catan before it was cool!",
+    };
+    return request(app)
+      .post("/api/reviews/13/comments")
+      .send(commentToSend)
+      .expect(201)
+      .then(({ body }) => {
+        const { comment } = body;
+        expect(comment[0]).toHaveProperty("comment_id");
+        expect(comment[0]).toHaveProperty("author");
+        expect(comment[0]).toHaveProperty("review_id");
+        expect(comment[0]).toHaveProperty("votes");
+        expect(comment[0]).toHaveProperty("created_at");
+        expect(comment[0]).toHaveProperty("body");
+        expect(comment[0].author).toBe("mallionaire");
+        expect(comment[0].body).toBe("I played Catan before it was cool!");
       });
   });
 });

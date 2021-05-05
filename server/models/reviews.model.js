@@ -101,3 +101,21 @@ exports.patchReviewVotesById = async (review_id, inc_votes) => {
   );
   return rows;
 };
+
+exports.insertCommentByReviewId = async (review_id, comment_body) => {
+  const { body } = comment_body;
+  const { username } = comment_body;
+  const { rows } = await db.query(
+    format(
+      `
+    INSERT INTO comments
+    (author, body, review_id, votes, created_at)
+    VALUES
+    (%L, DEFAULT, DEFAULT)
+    RETURNING*;
+  `,
+      [username, body, review_id]
+    )
+  );
+  return rows;
+};
