@@ -140,6 +140,7 @@ describe("idFetcher", () => {
     ]);
   });
 });
+
 describe("categoriesLookup", () => {
   test("should return an array", () => {
     return categoriesLookup().then((result) => {

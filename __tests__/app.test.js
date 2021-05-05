@@ -188,7 +188,7 @@ describe("PATCH /api/reviews/:review_id", () => {
   });
 });
 
-describe("GET /api/reviews?", () => {
+describe.only("GET /api/reviews?", () => {
   test("status: 200 responds with a list of all reviews when requested without queries", () => {
     return request(app)
       .get("/api/reviews")
@@ -314,7 +314,7 @@ describe("GET /api/reviews?", () => {
         expect(body.msg).toBe("Please provide a valid category query");
       });
   });
-  test("status: 400 error message if  sent order query that is not valid", () => {
+  test("status: 400 error message if sent order query that is not valid", () => {
     return request(app)
       .get("/api/reviews?order=ASDFGL")
       .expect(400)
