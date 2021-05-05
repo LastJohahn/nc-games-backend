@@ -433,6 +433,19 @@ describe("POST /api/reviews/:review_id/comments", () => {
         expect(body.msg).toBe("No review with this id found");
       });
   });
+  test("status: 400 responds with an error message when using something that isn't a valid review_id", () => {
+    const commentToSend = {
+      username: "mallionaire",
+      body: "I played Catan before it was cool!",
+    };
+    return request(app)
+      .post("/api/reviews/doggo/comments")
+      .send(commentToSend)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid request parameter");
+      });
+  });
 });
 
 afterAll(() => {
