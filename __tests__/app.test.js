@@ -188,7 +188,7 @@ describe("PATCH /api/reviews/:review_id", () => {
   });
 });
 
-describe.only("GET /api/reviews?", () => {
+describe("GET /api/reviews?", () => {
   test("status: 200 responds with a list of all reviews when requested without queries", () => {
     return request(app)
       .get("/api/reviews")
@@ -328,6 +328,49 @@ describe.only("GET /api/reviews?", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid sort_by query");
+      });
+  });
+});
+
+describe.only("GET /api/reviews/:review_id/comments", () => {
+  test("status: 200 responds with a list of comments associated with that review id", () => {
+    return request(app)
+      .get("/api/reviews/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments.length).toBe(3);
+        expect(comments).toContainEqual({
+          comment_id: 1,
+          author: "bainesface",
+          votes: 16,
+          created_at: "2017-11-22T12:43:33.389Z",
+          body: "I loved this game too!",
+        });
+      });
+  });
+  test("status: 200 responds with a list of comments associated with that review id", () => {
+    return request(app)
+      .get("/api/reviews/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments.length).toBe(3);
+        expect(comments).toContainEqual({
+          comment_id: 1,
+          author: "bainesface",
+          votes: 16,
+          created_at: "2017-11-22T12:43:33.389Z",
+          body: "I loved this game too!",
+        });
+      });
+  });
+  test("status: 404 responds with a no comments found message when passed a review id that does not have any associated comments", () => {
+    return request(app)
+      .get("/api/reviews/1/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No comments found for this review");
       });
   });
 });

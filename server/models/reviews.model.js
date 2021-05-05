@@ -62,6 +62,27 @@ exports.selectReviewById = async (review_id) => {
   return rows;
 };
 
+exports.selectCommentsByReviewId = async (review_id) => {
+  const { rows } = await db.query(
+    format(
+      `
+    SELECT comment_id, author, votes, created_at, body
+    FROM comments
+    WHERE review_id = %L
+    `,
+      [review_id]
+    )
+  );
+  if (rows.length != 0) {
+    return rows;
+  } else {
+    return Promise.reject({
+      status: 404,
+      msg: "No comments found for this review",
+    });
+  }
+};
+
 exports.patchReviewVotesById = async (review_id, inc_votes) => {
   if (inc_votes === undefined) {
     return Promise.reject({
