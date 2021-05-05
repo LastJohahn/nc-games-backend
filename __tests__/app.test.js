@@ -373,6 +373,14 @@ describe.only("GET /api/reviews/:review_id/comments", () => {
         expect(body.msg).toBe("No comments found for this review");
       });
   });
+  test("status: 400 responds with an invalid request parameter message if passed something that isn't a valid review id", () => {
+    return request(app)
+      .get("/api/reviews/dog/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid request parameter");
+      });
+  });
 });
 
 afterAll(() => {
