@@ -448,6 +448,30 @@ describe("POST /api/reviews/:review_id/comments", () => {
   });
 });
 
+describe("GET /api", () => {
+  test("status: 200 responds with JSON describing all available endpoints", () => {
+    return request(app)
+      .get("/api/")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toHaveProperty("endpoints");
+        expect(body.endpoints[0]).toHaveProperty("GET /api");
+        expect(body.endpoints[0]).toHaveProperty("GET /api/categories");
+        expect(body.endpoints[0]).toHaveProperty("GET /api/reviews");
+        expect(body.endpoints[0]).toHaveProperty("GET /api/reviews/:review_id");
+        expect(body.endpoints[0]).toHaveProperty(
+          "PATCH /api/reviews/:review_id"
+        );
+        expect(body.endpoints[0]).toHaveProperty(
+          "GET /api/reviews/:review_id/comments"
+        );
+        expect(body.endpoints[0]).toHaveProperty(
+          "POST /api/reviews/:review_id/comments"
+        );
+      });
+  });
+});
+
 afterAll(() => {
   return db.end();
 });
