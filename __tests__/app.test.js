@@ -92,7 +92,7 @@ describe("GET /api/reviews/:review_id", () => {
 });
 
 describe("PATCH /api/reviews/:review_id", () => {
-  test("status 200: responds with a review object with the correct review_id", () => {
+  test("status 200: responds with a review object with the correct review_id and all its native keys", () => {
     const newVotes = { inc_votes: 3 };
     return request(app)
       .patch("/api/reviews/2")
@@ -100,15 +100,6 @@ describe("PATCH /api/reviews/:review_id", () => {
       .expect(200)
       .then(({ body }) => {
         expect(body.review[0].review_id).toBe(2);
-      });
-  });
-  test("status: 200 responds with the review with all its native keys", () => {
-    const newVotes = { inc_votes: 2 };
-    return request(app)
-      .patch("/api/reviews/3")
-      .send(newVotes)
-      .expect(200)
-      .then(({ body }) => {
         expect(body.review[0]).toHaveProperty("review_id");
         expect(body.review[0]).toHaveProperty("title");
         expect(body.review[0]).toHaveProperty("review_body");
