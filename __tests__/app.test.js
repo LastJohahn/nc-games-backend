@@ -166,19 +166,12 @@ describe("PATCH /api/reviews/:review_id", () => {
 });
 
 describe("GET /api/reviews?", () => {
-  test("status: 200 responds with a list of all reviews when requested without queries", () => {
+  test("status: 200 responds with a list of all reviews with their native keys when requested without queries", () => {
     return request(app)
       .get("/api/reviews")
       .expect(200)
       .then(({ body }) => {
         expect(body.reviews.length).toBe(13);
-      });
-  });
-  test("status: 200 all reviews have their native keys", () => {
-    return request(app)
-      .get("/api/reviews")
-      .expect(200)
-      .then(({ body }) => {
         for (let i = 0; i < body.reviews.length; i++) {
           expect(body.reviews[i]).toHaveProperty("review_id");
           expect(body.reviews[i]).toHaveProperty("title");
