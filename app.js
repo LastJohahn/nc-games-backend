@@ -18,7 +18,6 @@ app.use("/api", apiRouter);
 app.all("/*", handleInvalidRouteErrors);
 
 app.use(handleCustomErrors);
-app.use(handleInvalidSortQuery);
 app.use(handleInvalidParam);
 app.use(handleInvalidUsername);
 app.use(handleInvalidReviewId);
