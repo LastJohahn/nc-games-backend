@@ -46,27 +46,13 @@ describe("GET /api/categories", () => {
 });
 
 describe("GET /api/reviews/:review_id", () => {
-  test("status: 200 responds with an object", () => {
+  test("status: 200 responds with an object of the review at the correct id with all its native keys", () => {
     return request(app)
       .get("/api/reviews/2")
       .expect(200)
       .then(({ body }) => {
         expect(typeof body).toBe("object");
-      });
-  });
-  test("status: 200 responds with an object of the review at the correct id", () => {
-    return request(app)
-      .get("/api/reviews/2")
-      .expect(200)
-      .then(({ body }) => {
         expect(body.review[0].review_id).toBe(2);
-      });
-  });
-  test("status: 200 responds with the review with all its native keys", () => {
-    return request(app)
-      .get("/api/reviews/3")
-      .expect(200)
-      .then(({ body }) => {
         expect(body.review[0]).toHaveProperty("review_id");
         expect(body.review[0]).toHaveProperty("title");
         expect(body.review[0]).toHaveProperty("review_body");
