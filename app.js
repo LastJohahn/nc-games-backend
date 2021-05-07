@@ -4,7 +4,6 @@ const {
   handleInternalServerError,
   handleInvalidParam,
   handleCustomErrors,
-  handleInvalidSortQuery,
   handleInvalidUsername,
   handleInvalidReviewId,
 } = require("./server/controllers/errors.controller.js");
