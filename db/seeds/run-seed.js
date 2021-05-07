@@ -1,11 +1,13 @@
-/*
-Here you will need to require in:
-- the seed function, 
-- the dev data,
-*/
+const seed = require("./seed.js");
+const devData = require("./data/development-data/index.js");
+
+const { categoryData } = devData;
+const { commentData } = devData;
+const { reviewData } = devData;
+const { userData } = devData;
 
 const runSeed = async () => {
-  // run the seed with the data
+  return seed(categoryData, commentData, reviewData, userData);
 };
 
 runSeed();
