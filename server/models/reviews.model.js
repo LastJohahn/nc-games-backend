@@ -17,6 +17,7 @@ exports.selectReviews = async (
     "category",
     "owner",
     "created_at",
+    "comment_count",
   ];
   if (sortByColumns.includes(sort_by)) {
     if ((order === "DESC" || order === "ASC") && category === undefined) {
