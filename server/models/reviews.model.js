@@ -138,3 +138,24 @@ exports.insertCommentByReviewId = async (review_id, comment_body) => {
   );
   return rows;
 };
+
+exports.removeCommentByIdFromReviewId = async (comment_id) => {
+  const { rows } = await db.query(
+    format(
+      `
+      DELETE FROM comments
+      WHERE comment_id = %L
+      RETURNING *;
+      `,
+      [comment_id]
+    )
+  );
+  if (rows.length != 0) {
+    return rows;
+  } else {
+    return Promise.reject({
+      status: 404,
+      msg: "No comment found with this id",
+    });
+  }
+};

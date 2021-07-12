@@ -81,7 +81,7 @@ Bear in mind, handling bad inputs from clients doesn't necessarily have to lead 
 
 ### DELETE `/api/comments/:comment_id`
 
--
+- invalid comment id
 
 ### GET `/api`
 

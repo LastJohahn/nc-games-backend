@@ -426,6 +426,20 @@ describe("GET /api", () => {
   });
 });
 
+describe("DELETE /api/reviews/:review_id/comments/:comment_id", () => {
+  test("status: 204 and no content once comment is deleted", () => {
+    return request(app).delete("/api/reviews/2/comments/1").expect(204);
+  });
+  test("status: 404 and error message stating no comment with this id if no comment with this id", () => {
+    return request(app)
+      .delete("/api/reviews/2/comments/413")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No comment found with this id");
+      });
+  });
+});
+
 afterAll(() => {
   return db.end();
 });
