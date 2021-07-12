@@ -150,5 +150,12 @@ exports.removeCommentByIdFromReviewId = async (comment_id) => {
       [comment_id]
     )
   );
-  return rows;
+  if (rows.length != 0) {
+    return rows;
+  } else {
+    return Promise.reject({
+      status: 404,
+      msg: "No comment found with this id",
+    });
+  }
 };
