@@ -3,7 +3,7 @@ const {
   makeReference,
   idFetcher,
 } = require("../db/utils/data-manipulation");
-const { categoriesLookup } = require("../db/utils/categoriesLookup.js");
+const { categoriesLookup } = require("../db/utils/lookups.js");
 
 describe("keyReplacer", () => {
   test("returns a new empty object when passed an empty object", () => {
