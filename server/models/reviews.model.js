@@ -140,7 +140,6 @@ exports.insertCommentByReviewId = async (review_id, comment_body) => {
 };
 
 exports.removeCommentByIdFromReviewId = async (comment_id) => {
-  console.log(comment_id);
   const { rows } = await db.query(
     format(
       `
