@@ -458,6 +458,27 @@ describe("GET /api/users", () => {
   });
 });
 
+describe("GET /api/users/:username", () => {
+  test("status: 200 responds with an object of the user associated with the queried username", () => {
+    return request(app)
+      .get("/api/users/dav3rid")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toHaveProperty("username", "dav3rid");
+        expect(body).toHaveProperty("avatar_url");
+        expect(body).toHaveProperty("name", "dave");
+      });
+  });
+  test("status: 404 and a message stating wrong username if no username found with this id", () => {
+    return request(app)
+      .get("/api/users/lalalala")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No user found with this username");
+      });
+  });
+});
+
 afterAll(() => {
   return db.end();
 });
