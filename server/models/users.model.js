@@ -23,5 +23,12 @@ exports.selectUserByUsername = async (username) => {
       [username]
     )
   );
-  return rows[0];
+  if (rows.length != 0) {
+    return rows[0];
+  } else {
+    return Promise.reject({
+      status: 404,
+      msg: "No user found with this username",
+    });
+  }
 };
