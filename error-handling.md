@@ -43,7 +43,7 @@ Bear in mind, handling bad inputs from clients doesn't necessarily have to lead 
 
 ### GET `/api/users/:username`
 
--
+- invalid username
 
 ### GET `/api/reviews/:review_id`
 
