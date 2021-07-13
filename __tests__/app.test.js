@@ -469,6 +469,14 @@ describe("GET /api/users/:username", () => {
         expect(body).toHaveProperty("name", "dave");
       });
   });
+  test("status: 404 and a message stating wrong username if no username found with this id", () => {
+    return request(app)
+      .get("/api/users/lalalala")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No user found with this username");
+      });
+  });
 });
 
 afterAll(() => {
