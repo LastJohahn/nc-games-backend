@@ -440,6 +440,24 @@ describe("DELETE /api/reviews/:review_id/comments/:comment_id", () => {
   });
 });
 
+describe("GET /api/users", () => {
+  test("status: 200 responds with an array of objects containing all usernames", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({ username: "mallionaire" }),
+            expect.objectContaining({ username: "philippaclaire9" }),
+            expect.objectContaining({ username: "bainesface" }),
+            expect.objectContaining({ username: "dav3rid" }),
+          ])
+        );
+      });
+  });
+});
+
 afterAll(() => {
   return db.end();
 });
