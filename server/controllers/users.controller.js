@@ -7,3 +7,7 @@ exports.getUsers = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.getUsersByUsername = (req, res, next) => {
+  const { username } = req.params;
+};
