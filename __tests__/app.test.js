@@ -465,7 +465,7 @@ describe("GET /api/users/:username", () => {
       .expect(200)
       .then(({ body }) => {
         expect(body).toHaveProperty("username", "dav3rid");
-        expec(body).toHaveProperty("avatar_url");
+        expect(body).toHaveProperty("avatar_url");
         expect(body).toHaveProperty("name", "dave");
       });
   });
