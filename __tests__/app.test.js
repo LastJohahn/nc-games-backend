@@ -199,7 +199,7 @@ describe("GET /api/reviews", () => {
         });
       });
   });
-  test("status: 200 reviews should be limited to 10 per page", () => {
+  test("status: 200 reviews should be limited to 10 per page if no query is passed to amend limit", () => {
     return request(app)
       .get("/api/reviews")
       .expect(200)
