@@ -495,6 +495,15 @@ describe("PATCH /api/comments/:comment_id", () => {
         expect(body.comment[0].votes).toBe(19);
       });
   });
+  test("status: 200 responds with the comment with all its native keys and the votes decreased if passed a negative integer", () => {
+    const newVotes = { inc_votes: -3 };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(newVotes)
+      .then(({ body }) => {
+        expect(body.comment[0].votes).toBe(13);
+      });
+  });
 });
 
 afterAll(() => {
