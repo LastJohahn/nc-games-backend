@@ -1,6 +1,12 @@
 const db = require("../../db/connection.js");
 
 exports.patchCommentVotesById = async (comment_id, inc_votes) => {
+  if (inc_votes === undefined) {
+    return Promise.reject({
+      status: 422,
+      msg: "Please provide a number to alter the votes count by",
+    });
+  }
   const { rows } = await db.query(
     `
       UPDATE comments
