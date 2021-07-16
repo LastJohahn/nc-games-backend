@@ -524,6 +524,16 @@ describe("PATCH /api/comments/:comment_id", () => {
         );
       });
   });
+  test("status: 400 responds with a message indicating that inc_votes needs to be a number when passed something that isn't one", () => {
+    const newVotes = { inc_votes: "mitch" };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(newVotes)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid request parameter");
+      });
+  });
 });
 
 afterAll(() => {
