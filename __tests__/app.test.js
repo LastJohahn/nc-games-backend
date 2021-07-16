@@ -504,6 +504,15 @@ describe("PATCH /api/comments/:comment_id", () => {
         expect(body.comment[0].votes).toBe(13);
       });
   });
+  test("status: 200 responds with the updated review object even if unrelated info is sent along with inc_votes", () => {
+    const newVotes = { inc_votes: 4, name: "Mitch" };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(newVotes)
+      .then(({ body }) => {
+        expect(body.comment[0].votes).toBe(20);
+      });
+  });
 });
 
 afterAll(() => {
