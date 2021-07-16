@@ -513,6 +513,17 @@ describe("PATCH /api/comments/:comment_id", () => {
         expect(body.comment[0].votes).toBe(20);
       });
   });
+  test("status: 422 responds with a message indication that inc_votes is needed to update votes when passed a patch request without inc_votes", () => {
+    const newVotes = {};
+    return request(app)
+      .patch("/api/comments/:comment_id")
+      .send(newVotes)
+      .then(({ body }) => {
+        expect(body.msg).toBe(
+          "Please provide a number to alter the votes count by"
+        );
+      });
+  });
 });
 
 afterAll(() => {
