@@ -1,6 +1,7 @@
 const express = require("express");
 const { endpointsLister } = require("../controllers/api.controller.js");
 const categoriesRouter = require("./categories.router.js");
+const commentsRouter = require("./comments.router.js");
 const reviewsRouter = require("./reviews.router.js");
 const usersRouter = require("./users.router.js");
 
@@ -11,6 +12,8 @@ apiRouter.use("/categories", categoriesRouter);
 apiRouter.use("/reviews", reviewsRouter);
 
 apiRouter.use("/users", usersRouter);
+
+apiRouter.use("/comments", commentsRouter);
 
 apiRouter.use("/", endpointsLister);
 

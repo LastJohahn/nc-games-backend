@@ -479,6 +479,63 @@ describe("GET /api/users/:username", () => {
   });
 });
 
+describe("PATCH /api/comments/:comment_id", () => {
+  test("status: 200 responds with the comment with all its native keys and the votes count updated if passed a positive integer", () => {
+    const newVotes = { inc_votes: 3 };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(newVotes)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comment[0].comment_id).toBe(1);
+        expect(body.comment[0]).toHaveProperty("author");
+        expect(body.comment[0]).toHaveProperty("review_id");
+        expect(body.comment[0]).toHaveProperty("created_at");
+        expect(body.comment[0]).toHaveProperty("body");
+        expect(body.comment[0].votes).toBe(19);
+      });
+  });
+  test("status: 200 responds with the comment with all its native keys and the votes decreased if passed a negative integer", () => {
+    const newVotes = { inc_votes: -3 };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(newVotes)
+      .then(({ body }) => {
+        expect(body.comment[0].votes).toBe(13);
+      });
+  });
+  test("status: 200 responds with the updated comment even if unrelated info is sent along with inc_votes", () => {
+    const newVotes = { inc_votes: 4, name: "Mitch" };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(newVotes)
+      .then(({ body }) => {
+        expect(body.comment[0].votes).toBe(20);
+      });
+  });
+  test("status: 422 responds with a message indication that inc_votes is needed to update votes when passed a patch request without inc_votes", () => {
+    const newVotes = {};
+    return request(app)
+      .patch("/api/comments/:comment_id")
+      .send(newVotes)
+      .then(({ body }) => {
+        expect(body.msg).toBe(
+          "Please provide a number to alter the votes count by"
+        );
+      });
+  });
+  test("status: 400 responds with a message indicating that inc_votes needs to be a number when passed something that isn't one", () => {
+    const newVotes = { inc_votes: "mitch" };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(newVotes)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid request parameter");
+      });
+  });
+});
+
 afterAll(() => {
   return db.end();
 });
