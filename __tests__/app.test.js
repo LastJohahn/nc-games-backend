@@ -479,6 +479,24 @@ describe("GET /api/users/:username", () => {
   });
 });
 
+describe("PATCH /api/comments/:comment_id", () => {
+  test("status: 200 responds with the comment with all its native keys and the votes count updated if passed a positive integer", () => {
+    const newVotes = { inc_votes: 3 };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(newVotes)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comment[0].comment_id).toBe(1);
+        expect(body.comment[0]).toHaveProperty("author");
+        expect(body.comment[0]).toHaveProperty("review_id");
+        expect(body.comment[0]).toHaveProperty("created_at");
+        expect(body.comment[0]).toHaveProperty("body");
+        expect(body.comment[0].votes).toBe(19);
+      });
+  });
+});
+
 afterAll(() => {
   return db.end();
 });
