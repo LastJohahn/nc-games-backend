@@ -215,7 +215,6 @@ describe("GET /api/reviews", () => {
         const { reviews } = body;
         expect(reviews[0].review_id).toBe(7);
         expect(reviews[5].review_id).toBe(9);
-        expect(reviews[12].review_id).toBe(13);
       });
   });
   test("status: 200 sorts by any valid column name if passed in as sort_by query", () => {
@@ -226,7 +225,6 @@ describe("GET /api/reviews", () => {
         const { reviews } = body;
         expect(reviews[0].review_id).toBe(3);
         expect(reviews[5].review_id).toBe(4);
-        expect(reviews[12].review_id).toBe(9);
       });
   });
   test("status: 200 default sort order is descending if not specified", () => {
@@ -237,7 +235,6 @@ describe("GET /api/reviews", () => {
         const { reviews } = body;
         expect(reviews[0].review_id).toBe(7);
         expect(reviews[5].review_id).toBe(9);
-        expect(reviews[12].review_id).toBe(13);
       });
   });
   test("status: 200 can specify sort order to be ASC", () => {
@@ -248,7 +245,6 @@ describe("GET /api/reviews", () => {
         const { reviews } = body;
         expect(reviews[0].review_id).toBe(13);
         expect(reviews[5].review_id).toBe(9);
-        expect(reviews[12].review_id).toBe(7);
       });
   });
   test("status: 200 can specify sort order to be DESC", () => {
@@ -259,7 +255,6 @@ describe("GET /api/reviews", () => {
         const { reviews } = body;
         expect(reviews[0].review_id).toBe(7);
         expect(reviews[5].review_id).toBe(9);
-        expect(reviews[12].review_id).toBe(13);
       });
   });
   test("status: 200 accepts a valid column name for category and filters accordingly", () => {
