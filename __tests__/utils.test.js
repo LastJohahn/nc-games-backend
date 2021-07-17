@@ -185,7 +185,7 @@ describe("selectReviewsQueryString", () => {
     const expectedOutput = `
   SELECT reviews.*, COUNT(comments.comment_id)::int AS comment_count FROM reviews
   LEFT JOIN comments ON comments.review_id = reviews.review_id
-  WHERE category LIKE "social deduction"
+  WHERE category LIKE 'social deduction'
   GROUP BY reviews.review_id
   ORDER BY reviews.review_id ASC;
   `;
