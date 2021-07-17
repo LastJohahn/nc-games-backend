@@ -8,7 +8,8 @@ exports.selectReviewsQueryString = (sort_by, order, category) => {
   SELECT reviews.*, COUNT(comments.comment_id)::int AS comment_count FROM reviews
   LEFT JOIN comments ON comments.review_id = reviews.review_id
   GROUP BY reviews.review_id
-  ORDER BY reviews.${sort_by} ${order};
+  ORDER BY reviews.${sort_by} ${order}
+  LIMIT 10;
   `,
       []
     );
@@ -19,7 +20,8 @@ exports.selectReviewsQueryString = (sort_by, order, category) => {
   LEFT JOIN comments ON comments.review_id = reviews.review_id
   WHERE category LIKE %L
   GROUP BY reviews.review_id
-  ORDER BY reviews.${sort_by} ${order};
+  ORDER BY reviews.${sort_by} ${order}
+  LIMIT 10;
   `,
       [category]
     );
