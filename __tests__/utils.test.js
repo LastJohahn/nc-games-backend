@@ -172,7 +172,8 @@ describe("selectReviewsQueryString", () => {
   SELECT reviews.*, COUNT(comments.comment_id)::int AS comment_count FROM reviews
   LEFT JOIN comments ON comments.review_id = reviews.review_id
   GROUP BY reviews.review_id
-  ORDER BY reviews.created_at DESC;
+  ORDER BY reviews.created_at DESC
+  LIMIT 10;
   `;
     expect(selectReviewsQueryString(sort_by, order, category)).toBe(
       expectedOutput
@@ -187,7 +188,8 @@ describe("selectReviewsQueryString", () => {
   LEFT JOIN comments ON comments.review_id = reviews.review_id
   WHERE category LIKE 'social deduction'
   GROUP BY reviews.review_id
-  ORDER BY reviews.review_id ASC;
+  ORDER BY reviews.review_id ASC
+  LIMIT 10;
   `;
     expect(selectReviewsQueryString(sort_by, order, category)).toBe(
       expectedOutput
