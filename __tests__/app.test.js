@@ -171,6 +171,7 @@ describe("GET /api/reviews", () => {
       .get("/api/reviews")
       .expect(200)
       .then(({ body }) => {
+        expect(body.reviews.length).toBe(13);
         for (let i = 0; i < body.reviews.length; i++) {
           expect(body.reviews[i]).toHaveProperty("review_id");
           expect(body.reviews[i]).toHaveProperty("title");
@@ -199,14 +200,14 @@ describe("GET /api/reviews", () => {
         });
       });
   });
-  test("status: 200 reviews should be limited to 10 per page if no query is passed to amend limit", () => {
-    return request(app)
-      .get("/api/reviews")
-      .expect(200)
-      .then(({ body }) => {
-        expect(body.reviews.length).toBe(10);
-      });
-  });
+  // test("status: 200 reviews should be limited to 10 per page if no query is passed to amend limit", () => {
+  //   return request(app)
+  //     .get("/api/reviews")
+  //     .expect(200)
+  //     .then(({ body }) => {
+  //       expect(body.reviews.length).toBe(10);
+  //     });
+  // });
   test("status: 200 if no sort_by query is passed in, default sorts by date", () => {
     return request(app)
       .get("/api/reviews")
