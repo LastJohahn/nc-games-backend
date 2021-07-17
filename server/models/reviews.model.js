@@ -1,6 +1,7 @@
 const db = require("../../db/connection.js");
 const format = require("pg-format");
 const { categoriesLookup } = require("../../db/utils/lookups.js");
+const { selectReviewsQueryString } = require("../../db/utils/querystrings.js");
 
 exports.selectReviews = async (
   sort_by = "created_at",
@@ -24,32 +25,9 @@ exports.selectReviews = async (
   if (sortByColumns.includes(sort_by)) {
     if (order === "DESC" || order === "ASC") {
       if (category === undefined || categories.includes(category)) {
-        if (category === undefined) {
-          const queryString = format(
-            `
-                SELECT reviews.*, COUNT(comments.comment_id)::int AS comment_count FROM reviews
-                LEFT JOIN comments ON comments.review_id = reviews.review_id
-                GROUP BY reviews.review_id
-                ORDER BY reviews.${sort_by} ${order};
-                `,
-            []
-          );
-          const { rows } = await db.query(queryString);
-          return rows;
-        } else {
-          const queryString = format(
-            `
-            SELECT reviews.*, COUNT(comments.comment_id)::int AS comment_count FROM reviews
-            LEFT JOIN comments ON comments.review_id = reviews.review_id
-            WHERE category LIKE %L
-            GROUP BY reviews.review_id
-            ORDER BY reviews.${sort_by} ${order};
-            `,
-            [category]
-          );
-          const { rows } = await db.query(queryString);
-          return rows;
-        }
+        const queryString = selectReviewsQueryString(sort_by, order, category);
+        const { rows } = await db.query(queryString);
+        return rows;
       } else {
         return Promise.reject({
           status: 400,
