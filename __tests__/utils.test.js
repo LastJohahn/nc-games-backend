@@ -4,6 +4,7 @@ const {
   idFetcher,
 } = require("../db/utils/data-manipulation");
 const { categoriesLookup } = require("../db/utils/lookups.js");
+const { selectReviewsQueryString } = require("../db/utils/querystrings.js");
 
 describe("keyReplacer", () => {
   test("returns a new empty object when passed an empty object", () => {
@@ -156,5 +157,40 @@ describe("categoriesLookup", () => {
         "children's games"
       );
     });
+  });
+});
+
+describe("selectReviewsQueryString", () => {
+  test("should return a string", () => {
+    expect(typeof selectReviewsQueryString()).toBe("string");
+  });
+  test("should return the queryString the correct sort_by and order queries inserted", () => {
+    const sort_by = "created_at";
+    const order = "DESC";
+    let category;
+    const expectedOutput = `
+  SELECT reviews.*, COUNT(comments.comment_id)::int AS comment_count FROM reviews
+  LEFT JOIN comments ON comments.review_id = reviews.review_id
+  GROUP BY reviews.review_id
+  ORDER BY reviews.created_at DESC;
+  `;
+    expect(selectReviewsQueryString(sort_by, order, category)).toBe(
+      expectedOutput
+    );
+  });
+  test("should return the queryString with the correct WHERE clause inserted if categories is not undefined", () => {
+    const sort_by = "review_id";
+    const order = "ASC";
+    const category = "social deduction";
+    const expectedOutput = `
+  SELECT reviews.*, COUNT(comments.comment_id)::int AS comment_count FROM reviews
+  LEFT JOIN comments ON comments.review_id = reviews.review_id
+  WHERE category LIKE "social deduction"
+  GROUP BY reviews.review_id
+  ORDER BY reviews.review_id ASC;
+  `;
+    expect(selectReviewsQueryString(sort_by, order, category)).toBe(
+      expectedOutput
+    );
   });
 });
