@@ -2,6 +2,7 @@ const db = require("../../db/connection.js");
 const format = require("pg-format");
 const { categoriesLookup } = require("../../db/utils/lookups.js");
 const { selectReviewsQueryString } = require("../../db/utils/querystrings.js");
+const { limitSanitiser } = require("../../db/utils/sanitisers.js");
 
 exports.selectReviews = async (
   sort_by = "created_at",
@@ -22,29 +23,41 @@ exports.selectReviews = async (
     "comment_count",
   ];
   const categories = await categoriesLookup();
-
-  if (sortByColumns.includes(sort_by)) {
-    if (order === "DESC" || order === "ASC") {
-      if (category === undefined || categories.includes(category)) {
-        const queryString = selectReviewsQueryString(sort_by, order, category);
-        const { rows } = await db.query(queryString);
-        return rows;
+  const validLimit = limitSanitiser(limit);
+  if (validLimit != "NaN") {
+    if (sortByColumns.includes(sort_by)) {
+      if (order === "DESC" || order === "ASC") {
+        if (category === undefined || categories.includes(category)) {
+          const queryString = selectReviewsQueryString(
+            sort_by,
+            order,
+            category,
+            validLimit
+          );
+          const { rows } = await db.query(queryString);
+          return rows;
+        } else {
+          return Promise.reject({
+            status: 400,
+            msg: "Please provide a valid category query",
+          });
+        }
       } else {
         return Promise.reject({
           status: 400,
-          msg: "Please provide a valid category query",
+          msg: "Please provide a valid order query",
         });
       }
     } else {
       return Promise.reject({
         status: 400,
-        msg: "Please provide a valid order query",
+        msg: "Invalid sort_by query",
       });
     }
   } else {
     return Promise.reject({
       status: 400,
-      msg: "Invalid sort_by query",
+      msg: "Please provide a valid limit query",
     });
   }
 };
