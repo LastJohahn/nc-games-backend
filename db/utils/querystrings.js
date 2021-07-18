@@ -1,6 +1,12 @@
 const format = require("pg-format");
 
-exports.selectReviewsQueryString = (sort_by, order, category, validLimit) => {
+exports.selectReviewsQueryString = (
+  sort_by,
+  order,
+  category,
+  validLimit,
+  p = "1"
+) => {
   let queryString;
   if (!category) {
     queryString = format(
