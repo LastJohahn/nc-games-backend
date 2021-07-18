@@ -223,6 +223,15 @@ describe("GET /api/reviews", () => {
         expect(body.msg).toBe("Please provide a valid limit query");
       });
   });
+  test("status: 200 should be able to pass in p query to get to subsequent pages of reviews beyond LIMIT", () => {
+    return request(app)
+      .get("/api/reviews?limit=5&sort_by=review_id&p=2&order=ASC")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews[0].review_id).toBe(6);
+      });
+  });
   test("status: 200 if no sort_by query is passed in, default sorts by date", () => {
     return request(app)
       .get("/api/reviews")
