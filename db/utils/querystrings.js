@@ -1,4 +1,5 @@
 const format = require("pg-format");
+const { offsetCalculator } = require("./data-manipulation.js");
 
 exports.selectReviewsQueryString = (
   sort_by,
@@ -8,6 +9,7 @@ exports.selectReviewsQueryString = (
   p = "1"
 ) => {
   let queryString;
+  const validPage = offsetCalculator(validLimit, p);
   if (!category) {
     queryString = format(
       `
@@ -15,7 +17,7 @@ exports.selectReviewsQueryString = (
   LEFT JOIN comments ON comments.review_id = reviews.review_id
   GROUP BY reviews.review_id
   ORDER BY reviews.${sort_by} ${order}
-  LIMIT ${validLimit};
+  LIMIT ${validLimit} OFFSET ${validPage};
   `,
       []
     );
@@ -27,7 +29,7 @@ exports.selectReviewsQueryString = (
   WHERE category LIKE %L
   GROUP BY reviews.review_id
   ORDER BY reviews.${sort_by} ${order}
-  LIMIT ${validLimit};
+  LIMIT ${validLimit} OFFSET ${validPage};
   `,
       [category]
     );
