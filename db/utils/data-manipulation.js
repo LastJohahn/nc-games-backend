@@ -27,10 +27,12 @@ exports.idFetcher = (comments, referenceTable) => {
   return newCommentsWithId;
 };
 
-const offsetCalculator = (validLimit, p) => {
+exports.offsetCalculator = (validLimit, p) => {
   if (numberSanitiser(p) != "NaN") {
     var validPage = numberSanitiser(p);
   } else {
     var validPage = "1";
   }
+  const offset = ((parseInt(validPage) - 1) * parseInt(validLimit)).toString();
+  return offset;
 };
