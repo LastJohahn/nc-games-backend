@@ -215,6 +215,14 @@ describe("GET /api/reviews", () => {
         expect(body.reviews.length).toBe(11);
       });
   });
+  test("status: 400 should return error message if passed something that is not a number for limit", () => {
+    return request(app)
+      .get("/api/reviews?limit=fuuuu")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Please provide a valid limit query");
+      });
+  });
   test("status: 200 if no sort_by query is passed in, default sorts by date", () => {
     return request(app)
       .get("/api/reviews")
