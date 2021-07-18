@@ -2,6 +2,7 @@ const {
   keyReplacer,
   makeReference,
   idFetcher,
+  offsetCalculator,
 } = require("../db/utils/data-manipulation");
 const { categoriesLookup } = require("../db/utils/lookups.js");
 const { selectReviewsQueryString } = require("../db/utils/querystrings.js");
@@ -250,4 +251,8 @@ describe("numberSanitiser", () => {
     expect(numberSanitiser(limit)).toBe("NaN");
     expect(numberSanitiser(limit2)).toBe("NaN");
   });
+});
+
+describe("offsetCalculator", () => {
+  test("should ", () => {});
 });
