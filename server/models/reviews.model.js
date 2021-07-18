@@ -8,7 +8,8 @@ exports.selectReviews = async (
   sort_by = "created_at",
   order = "DESC",
   category,
-  limit = "10"
+  limit = "10",
+  p
 ) => {
   const sortByColumns = [
     "review_id",
