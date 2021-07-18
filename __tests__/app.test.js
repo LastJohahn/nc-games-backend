@@ -207,6 +207,14 @@ describe("GET /api/reviews", () => {
         expect(body.reviews.length).toBe(10);
       });
   });
+  test("status: 200 should be able to amend limit by passing in appropriate query", () => {
+    return request(app)
+      .get("/api/reviews?limit=11")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.reviews.length).toBe(11);
+      });
+  });
   test("status: 200 if no sort_by query is passed in, default sorts by date", () => {
     return request(app)
       .get("/api/reviews")
