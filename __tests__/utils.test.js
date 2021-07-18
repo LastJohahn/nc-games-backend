@@ -200,6 +200,19 @@ describe("selectReviewsQueryString", () => {
 
 describe("limitSanitiser", () => {
   test("should return a string", () => {
+    const limit = "12";
     expect(typeof limitSanitiser()).toBe("string");
+  });
+  test("should check if the passed string can be converted into an integer and return the string of the integer if yes", () => {
+    const limit = "11";
+    const limitNotInt = "11.2";
+    expect(limitSanitiser(limit)).toBe("11");
+    expect(limitSanitiser(limitNotInt)).toBe("11");
+  });
+  test("should return a string of NaN if the passed string cannot be converted to an integer", () => {
+    const limit = "ffff3";
+    const limit2 = "   ";
+    expect(limitSanitiser(limit)).toBe("NaN");
+    expect(limitSanitiser(limit2)).toBe("NaN");
   });
 });
