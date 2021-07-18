@@ -169,6 +169,7 @@ describe("selectReviewsQueryString", () => {
     const sort_by = "created_at";
     const order = "DESC";
     let category;
+    const validLimit = "10";
     const expectedOutput = `
   SELECT reviews.*, COUNT(comments.comment_id)::int AS comment_count FROM reviews
   LEFT JOIN comments ON comments.review_id = reviews.review_id
@@ -176,7 +177,7 @@ describe("selectReviewsQueryString", () => {
   ORDER BY reviews.created_at DESC
   LIMIT 10;
   `;
-    expect(selectReviewsQueryString(sort_by, order, category)).toBe(
+    expect(selectReviewsQueryString(sort_by, order, category, validLimit)).toBe(
       expectedOutput
     );
   });
@@ -184,6 +185,7 @@ describe("selectReviewsQueryString", () => {
     const sort_by = "review_id";
     const order = "ASC";
     const category = "social deduction";
+    const validLimit = "10";
     const expectedOutput = `
   SELECT reviews.*, COUNT(comments.comment_id)::int AS comment_count FROM reviews
   LEFT JOIN comments ON comments.review_id = reviews.review_id
@@ -192,7 +194,7 @@ describe("selectReviewsQueryString", () => {
   ORDER BY reviews.review_id ASC
   LIMIT 10;
   `;
-    expect(selectReviewsQueryString(sort_by, order, category)).toBe(
+    expect(selectReviewsQueryString(sort_by, order, category, validLimit)).toBe(
       expectedOutput
     );
   });
