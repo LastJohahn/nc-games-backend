@@ -1,6 +1,6 @@
 const format = require("pg-format");
 
-exports.selectReviewsQueryString = (sort_by, order, category) => {
+exports.selectReviewsQueryString = (sort_by, order, category, validLimit) => {
   let queryString;
   if (!category) {
     queryString = format(
@@ -9,7 +9,7 @@ exports.selectReviewsQueryString = (sort_by, order, category) => {
   LEFT JOIN comments ON comments.review_id = reviews.review_id
   GROUP BY reviews.review_id
   ORDER BY reviews.${sort_by} ${order}
-  LIMIT 10;
+  LIMIT ${validLimit};
   `,
       []
     );
@@ -21,7 +21,7 @@ exports.selectReviewsQueryString = (sort_by, order, category) => {
   WHERE category LIKE %L
   GROUP BY reviews.review_id
   ORDER BY reviews.${sort_by} ${order}
-  LIMIT 10;
+  LIMIT ${validLimit};
   `,
       [category]
     );
