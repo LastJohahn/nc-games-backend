@@ -5,6 +5,7 @@ const {
 } = require("../db/utils/data-manipulation");
 const { categoriesLookup } = require("../db/utils/lookups.js");
 const { selectReviewsQueryString } = require("../db/utils/querystrings.js");
+const { limitSanitiser } = require("../db/utils/sanitisers.js");
 
 describe("keyReplacer", () => {
   test("returns a new empty object when passed an empty object", () => {
@@ -194,5 +195,11 @@ describe("selectReviewsQueryString", () => {
     expect(selectReviewsQueryString(sort_by, order, category)).toBe(
       expectedOutput
     );
+  });
+});
+
+describe("limitSanitiser", () => {
+  test("should return a string", () => {
+    expect(typeof limitSanitiser()).toBe("string");
   });
 });
