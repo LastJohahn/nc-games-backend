@@ -6,7 +6,8 @@ const { selectReviewsQueryString } = require("../../db/utils/querystrings.js");
 exports.selectReviews = async (
   sort_by = "created_at",
   order = "DESC",
-  category
+  category,
+  limit = "10"
 ) => {
   const sortByColumns = [
     "review_id",
