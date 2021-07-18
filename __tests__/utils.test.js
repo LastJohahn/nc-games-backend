@@ -198,12 +198,45 @@ describe("selectReviewsQueryString", () => {
       expectedOutput
     );
   });
+  test("should return the queryString with the correct LIMIT inserted when there is no category specified", () => {
+    const sort_by = "created_at";
+    const order = "DESC";
+    let category;
+    const validLimit = "12";
+    const expectedOutput = `
+  SELECT reviews.*, COUNT(comments.comment_id)::int AS comment_count FROM reviews
+  LEFT JOIN comments ON comments.review_id = reviews.review_id
+  GROUP BY reviews.review_id
+  ORDER BY reviews.created_at DESC
+  LIMIT 12;
+  `;
+    expect(selectReviewsQueryString(sort_by, order, category, validLimit)).toBe(
+      expectedOutput
+    );
+  });
+  test("should return the queryString with the correct LIMIT inserted when there is a category specified", () => {
+    const sort_by = "review_id";
+    const order = "ASC";
+    const category = "social deduction";
+    const validLimit = "8";
+    const expectedOutput = `
+  SELECT reviews.*, COUNT(comments.comment_id)::int AS comment_count FROM reviews
+  LEFT JOIN comments ON comments.review_id = reviews.review_id
+  WHERE category LIKE 'social deduction'
+  GROUP BY reviews.review_id
+  ORDER BY reviews.review_id ASC
+  LIMIT 8;
+  `;
+    expect(selectReviewsQueryString(sort_by, order, category, validLimit)).toBe(
+      expectedOutput
+    );
+  });
 });
 
 describe("limitSanitiser", () => {
   test("should return a string", () => {
     const limit = "12";
-    expect(typeof limitSanitiser()).toBe("string");
+    expect(typeof limitSanitiser(limit)).toBe("string");
   });
   test("should check if the passed string can be converted into an integer and return the string of the integer if yes", () => {
     const limit = "11";
