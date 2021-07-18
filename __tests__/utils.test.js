@@ -176,7 +176,7 @@ describe("selectReviewsQueryString", () => {
   LEFT JOIN comments ON comments.review_id = reviews.review_id
   GROUP BY reviews.review_id
   ORDER BY reviews.created_at DESC
-  LIMIT 10;
+  LIMIT 10 OFFSET 0;
   `;
     expect(selectReviewsQueryString(sort_by, order, category, validLimit)).toBe(
       expectedOutput
@@ -193,7 +193,7 @@ describe("selectReviewsQueryString", () => {
   WHERE category LIKE 'social deduction'
   GROUP BY reviews.review_id
   ORDER BY reviews.review_id ASC
-  LIMIT 10;
+  LIMIT 10 OFFSET 0;
   `;
     expect(selectReviewsQueryString(sort_by, order, category, validLimit)).toBe(
       expectedOutput
@@ -209,7 +209,7 @@ describe("selectReviewsQueryString", () => {
   LEFT JOIN comments ON comments.review_id = reviews.review_id
   GROUP BY reviews.review_id
   ORDER BY reviews.created_at DESC
-  LIMIT 12;
+  LIMIT 12 OFFSET 0;
   `;
     expect(selectReviewsQueryString(sort_by, order, category, validLimit)).toBe(
       expectedOutput
@@ -226,11 +226,28 @@ describe("selectReviewsQueryString", () => {
   WHERE category LIKE 'social deduction'
   GROUP BY reviews.review_id
   ORDER BY reviews.review_id ASC
-  LIMIT 8;
+  LIMIT 8 OFFSET 0;
   `;
     expect(selectReviewsQueryString(sort_by, order, category, validLimit)).toBe(
       expectedOutput
     );
+  });
+  test("should return the queryString with teh correct offset inserted when passed p != 1 when there is no category specified", () => {
+    const sort_by = "created_at";
+    const order = "DESC";
+    let category;
+    const validLimit = "12";
+    const p = "2";
+    const expectedOutput = `
+  SELECT reviews.*, COUNT(comments.comment_id)::int AS comment_count FROM reviews
+  LEFT JOIN comments ON comments.review_id = reviews.review_id
+  GROUP BY reviews.review_id
+  ORDER BY reviews.created_at DESC
+  LIMIT 12 OFFSET 12;
+  `;
+    expect(
+      selectReviewsQueryString(sort_by, order, category, validLimit, p)
+    ).toBe(expectedOutput);
   });
 });
 
