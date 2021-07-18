@@ -254,5 +254,17 @@ describe("numberSanitiser", () => {
 });
 
 describe("offsetCalculator", () => {
-  test("should ", () => {});
+  test("should return a stringified integer representing the offset number that follows OFFSET = ((p-1) x validLimit) formula", () => {
+    const validLimit = "10";
+    const p = "2";
+    const validLimit2 = "3";
+    const p2 = "12";
+    expect(offsetCalculator(validLimit, p)).toBe("10");
+    expect(offsetCalculator(validLimit2, p2)).toBe("33");
+  });
+  test("should return 0 if p is anything that cannot be parsed into a valid integer", () => {
+    const validLimit = "11";
+    const p = "FUI";
+    expect(offsetCalculator(validLimit, p)).toBe("0");
+  });
 });
