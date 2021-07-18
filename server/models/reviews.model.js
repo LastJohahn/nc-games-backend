@@ -2,7 +2,7 @@ const db = require("../../db/connection.js");
 const format = require("pg-format");
 const { categoriesLookup } = require("../../db/utils/lookups.js");
 const { selectReviewsQueryString } = require("../../db/utils/querystrings.js");
-const { limitSanitiser } = require("../../db/utils/sanitisers.js");
+const { numberSanitiser } = require("../../db/utils/sanitisers.js");
 
 exports.selectReviews = async (
   sort_by = "created_at",
@@ -23,7 +23,7 @@ exports.selectReviews = async (
     "comment_count",
   ];
   const categories = await categoriesLookup();
-  const validLimit = limitSanitiser(limit);
+  const validLimit = numberSanitiser(limit);
   if (validLimit != "NaN") {
     if (sortByColumns.includes(sort_by)) {
       if (order === "DESC" || order === "ASC") {

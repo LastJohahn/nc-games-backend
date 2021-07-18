@@ -1,6 +1,6 @@
-exports.limitSanitiser = (limit) => {
-  const parsedLimit = parseInt(limit);
-  if (!Number.isNaN(parsedLimit)) {
-    return parsedLimit.toString();
+exports.numberSanitiser = (number) => {
+  const parsednumber = parseInt(number);
+  if (!Number.isNaN(parsednumber)) {
+    return parsednumber.toString();
   } else return "NaN";
 };
