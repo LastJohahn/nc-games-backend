@@ -33,7 +33,8 @@ exports.selectReviews = async (
             sort_by,
             order,
             category,
-            validLimit
+            validLimit,
+            p
           );
           const { rows } = await db.query(queryString);
           return rows;
