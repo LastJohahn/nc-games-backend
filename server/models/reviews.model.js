@@ -159,3 +159,25 @@ exports.removeCommentByIdFromReviewId = async (comment_id) => {
     });
   }
 };
+
+exports.insertReview = async (
+  owner,
+  title,
+  review_body,
+  designer,
+  category
+) => {
+  const { rows } = await db.query(
+    format(
+      `
+      INSERT INTO reviews
+      (title, review_body, designer, owner, category, votes, review_img_url, created_at)
+      VALUES
+      (%L, DEFAULT, DEFAULT, DEFAULT)
+      RETURNING*;
+      `,
+      [title, review_body, designer, owner, category]
+    )
+  );
+  return rows;
+};
