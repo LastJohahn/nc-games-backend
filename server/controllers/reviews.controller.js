@@ -62,3 +62,7 @@ exports.deleteCommentByIdFromReviewId = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.postReview = (req, res, next) => {
+  const { owner, title, review_body, designer, category } = req.body;
+};
