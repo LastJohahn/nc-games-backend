@@ -536,6 +536,39 @@ describe("PATCH /api/comments/:comment_id", () => {
   });
 });
 
+describe("POST api/reviews", () => {
+  test("status: 201 responds with the posted review", () => {
+    const reviewToSend = {
+      owner: "dav3rid",
+      title: "the classic",
+      review_body:
+        "Catan needs no introduction, just trust me and start an evil sheep empire",
+      designer: "Klaus Teuber",
+      category: "euro game",
+    };
+    return request(app)
+      .post("/api/reviews")
+      .send(reviewToSend)
+      .expect(201)
+      .then(({ body }) => {
+        const { review } = body;
+        expect(review[0]).toHaveProperty("review_id");
+        expect(review[0]).toHaveProperty("owner");
+        expect(review[0]).toHaveProperty("title");
+        expect(review[0]).toHaveProperty("designer");
+        expect(review[0]).toHaveProperty("category");
+        expect(review[0]).toHaveProperty("review_body");
+        expect(review[0]).toHaveProperty("created_at");
+        expect(review[0]).toHaveProperty("votes");
+        expect(review[0]).toHaveProperty("comment_count");
+        expect(review[0].author).toBe("dav3rid");
+        expect(review[0].body).toBe(
+          "Catan needs no introduction, just trust me and start an evil sheep empire"
+        );
+      });
+  });
+});
+
 afterAll(() => {
   return db.end();
 });
