@@ -565,6 +565,28 @@ describe("POST api/reviews", () => {
         );
       });
   });
+  test("status: 422 if not passed a valid category", () => {
+    const reviewToSend = {
+      owner: "dav3rid",
+      title: "the classic",
+      review_body:
+        "Catan needs no introduction, just trust me and start an evil sheep empire",
+      designer: "Klaus Teuber",
+      category: "apple pie",
+    };
+    return request(app).post("/api/reviews").send(reviewToSend).expect(422);
+  });
+  test("status: 422 when passed an owner not in the users table", () => {
+    const reviewToSend = {
+      owner: "daverid",
+      title: "the classic",
+      review_body:
+        "Catan needs no introduction, just trust me and start an evil sheep empire",
+      designer: "Klaus Teuber",
+      category: "euro game",
+    };
+    return request(app).post("/api/reviews").send(reviewToSend).expect(422);
+  });
 });
 
 afterAll(() => {
