@@ -11,3 +11,5 @@ exports.selectCategories = () => {
       return result.rows;
     });
 };
+
+exports.insertCategory = async (category_body) => {};
