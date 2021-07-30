@@ -589,6 +589,26 @@ describe("POST api/reviews", () => {
   });
 });
 
+describe("POST /api/categories", () => {
+  test("status: 201 and responds with the new category object", () => {
+    const categoryToSend = {
+      slug: "cat games",
+      description:
+        "a game where you have to sit still for a long time and then pounce",
+    };
+    return request(app)
+      .post("/api/categories")
+      .send(categoryToSend)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.slug).toBe("cat games");
+        expect(body.description).toBe(
+          "a game where you have to sit still for a long time and then pounce"
+        );
+      });
+  });
+});
+
 afterAll(() => {
   return db.end();
 });
