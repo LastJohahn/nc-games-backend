@@ -6,11 +6,12 @@ const {
   getCommentsByReviewId,
   postCommentByReviewId,
   deleteCommentByIdFromReviewId,
+  postReview,
 } = require("../controllers/reviews.controller");
 
 const reviewsRouter = express.Router();
 
-reviewsRouter.route("/").get(getReviews);
+reviewsRouter.route("/").get(getReviews).post(postReview);
 
 reviewsRouter
   .route("/:review_id")
