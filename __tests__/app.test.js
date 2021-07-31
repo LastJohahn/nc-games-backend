@@ -613,6 +613,14 @@ describe("DELETE /api/reviews/:review_id", () => {
   test("status: 204 when a review has been deleted", () => {
     return request(app).delete("/api/reviews/1").expect(204);
   });
+  test("status: 422 and an error message when using a review id not associated with a review", () => {
+    return request(app)
+      .delete("/api/reviews/200000")
+      .expect(422)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No review with this ID");
+      });
+  });
 });
 
 afterAll(() => {
