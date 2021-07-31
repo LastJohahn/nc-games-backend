@@ -13,5 +13,9 @@ exports.getCategories = (req, res, next) => {
 
 exports.postCategory = (req, res, next) => {
   const category_body = req.body;
-  insertCategory(category_body);
+  insertCategory(category_body)
+    .then((category) => {
+      res.status(201).send(category[0]);
+    })
+    .catch(next);
 };
