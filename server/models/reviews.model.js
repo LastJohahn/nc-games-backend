@@ -193,5 +193,11 @@ exports.deleteReview = async (review_id) => {
       [review_id]
     )
   );
+  if (rows.length === 0) {
+    return Promise.reject({
+      status: 404,
+      msg: "No review with this ID",
+    });
+  }
   return rows;
 };
