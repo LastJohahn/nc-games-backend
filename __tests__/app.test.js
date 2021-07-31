@@ -609,6 +609,12 @@ describe("POST /api/categories", () => {
   });
 });
 
+describe("DELETE /api/reviews/:review_id", () => {
+  test("status: 204 when a review has been deleted", () => {
+    return request(app).delete("/api/reviews/1").expect(204);
+  });
+});
+
 afterAll(() => {
   return db.end();
 });
