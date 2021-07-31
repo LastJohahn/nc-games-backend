@@ -621,6 +621,9 @@ describe("DELETE /api/reviews/:review_id", () => {
         expect(body.msg).toBe("No review with this ID");
       });
   });
+  test("status: 400 bad request if passed something that isnt a valid review id", () => {
+    return request(app).delete("/api/reviews/applepie").expect(400);
+  });
 });
 
 afterAll(() => {
