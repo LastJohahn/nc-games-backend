@@ -181,3 +181,17 @@ exports.insertReview = async (
   );
   return rows;
 };
+
+exports.deleteReview = async (review_id) => {
+  const { rows } = await db.query(
+    format(
+      `
+      DELETE FROM reviews
+      WHERE review_id = %L
+      RETURNING*;
+      `,
+      [review_id]
+    )
+  );
+  return rows;
+};
