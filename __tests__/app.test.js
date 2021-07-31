@@ -609,6 +609,23 @@ describe("POST /api/categories", () => {
   });
 });
 
+describe("DELETE /api/reviews/:review_id", () => {
+  test("status: 204 when a review has been deleted", () => {
+    return request(app).delete("/api/reviews/1").expect(204);
+  });
+  test("status: 422 and an error message when using a review id not associated with a review", () => {
+    return request(app)
+      .delete("/api/reviews/200000")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No review with this ID");
+      });
+  });
+  test("status: 400 bad request if passed something that isnt a valid review id", () => {
+    return request(app).delete("/api/reviews/applepie").expect(400);
+  });
+});
+
 afterAll(() => {
   return db.end();
 });

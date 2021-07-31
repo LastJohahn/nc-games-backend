@@ -181,3 +181,23 @@ exports.insertReview = async (
   );
   return rows;
 };
+
+exports.deleteReview = async (review_id) => {
+  const { rows } = await db.query(
+    format(
+      `
+      DELETE FROM reviews
+      WHERE review_id = %L
+      RETURNING*;
+      `,
+      [review_id]
+    )
+  );
+  if (rows.length === 0) {
+    return Promise.reject({
+      status: 404,
+      msg: "No review with this ID",
+    });
+  }
+  return rows;
+};
