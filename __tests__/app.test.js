@@ -3,6 +3,7 @@ const { seed } = require("../db/seeds/seed.js");
 const testData = require("../db/data/test-data/index.js");
 const db = require("../db/connection.js");
 const app = require("../app.js");
+const { toBeSortedBy } = require("jest-sorted");
 
 beforeEach(() => {
   return seed(testData);
@@ -192,15 +193,13 @@ describe("GET /api/reviews?", () => {
         });
       });
   });
-  test("status: 200 if no sort_by query is passed in, default sorts by date", () => {
+  test("status: 200 if no sort_by query is passed in, default sorts by date descending", () => {
     return request(app)
       .get("/api/reviews")
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
-        expect(reviews[0].review_id).toBe(7);
-        expect(reviews[5].review_id).toBe(9);
-        expect(reviews[12].review_id).toBe(13);
+        expect(reviews).toBeSortedBy("created_at", { descending: true });
       });
   });
   test("status: 200 sorts by any valid column name if passed in as sort_by query", () => {
@@ -209,20 +208,7 @@ describe("GET /api/reviews?", () => {
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
-        expect(reviews[0].review_id).toBe(3);
-        expect(reviews[5].review_id).toBe(4);
-        expect(reviews[12].review_id).toBe(9);
-      });
-  });
-  test("status: 200 default sort order is descending if not specified", () => {
-    return request(app)
-      .get("/api/reviews")
-      .expect(200)
-      .then(({ body }) => {
-        const { reviews } = body;
-        expect(reviews[0].review_id).toBe(7);
-        expect(reviews[5].review_id).toBe(9);
-        expect(reviews[12].review_id).toBe(13);
+        expect(reviews).toBeSortedBy("designer");
       });
   });
   test("status: 200 can specify sort order to be ASC", () => {
@@ -231,20 +217,7 @@ describe("GET /api/reviews?", () => {
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
-        expect(reviews[0].review_id).toBe(13);
-        expect(reviews[5].review_id).toBe(9);
-        expect(reviews[12].review_id).toBe(7);
-      });
-  });
-  test("status: 200 can specify sort order to be DESC", () => {
-    return request(app)
-      .get("/api/reviews?order=DESC")
-      .expect(200)
-      .then(({ body }) => {
-        const { reviews } = body;
-        expect(reviews[0].review_id).toBe(7);
-        expect(reviews[5].review_id).toBe(9);
-        expect(reviews[12].review_id).toBe(13);
+        expect(reviews).toBeSortedBy("created_at");
       });
   });
   test("status: 200 accepts a valid column name for category and filters accordingly", () => {
