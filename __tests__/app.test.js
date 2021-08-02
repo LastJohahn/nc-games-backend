@@ -45,13 +45,13 @@ describe("GET /api/categories", () => {
 });
 
 describe("GET /api/reviews/:review_id", () => {
-  test("status: 200 responds with an object of the review at the correct id with all its native keys", () => {
+  test("status: 200 responds with an object of the review at the correct id with all its native keys and an additional key of comment_count", () => {
     return request(app)
-      .get("/api/reviews/2")
+      .get("/api/reviews/3")
       .expect(200)
       .then(({ body }) => {
         expect(typeof body).toBe("object");
-        expect(body.review[0].review_id).toBe(2);
+        expect(body.review[0].review_id).toBe(3);
         expect(body.review[0]).toHaveProperty("review_id");
         expect(body.review[0]).toHaveProperty("title");
         expect(body.review[0]).toHaveProperty("review_body");
@@ -61,13 +61,6 @@ describe("GET /api/reviews/:review_id", () => {
         expect(body.review[0]).toHaveProperty("category");
         expect(body.review[0]).toHaveProperty("owner");
         expect(body.review[0]).toHaveProperty("created_at");
-      });
-  });
-  test("status: 200 responds with the correct review with the additional key of comment_count, which represents the total count of all the comments with this review_id", () => {
-    return request(app)
-      .get("/api/reviews/3")
-      .expect(200)
-      .then(({ body }) => {
         expect(body.review[0]).toHaveProperty("comment_count");
         expect(body.review[0].comment_count).toBe(3);
       });
