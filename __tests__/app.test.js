@@ -3,7 +3,6 @@ const { seed } = require("../db/seeds/seed.js");
 const testData = require("../db/data/test-data/index.js");
 const db = require("../db/connection.js");
 const app = require("../app.js");
-const { response } = require("express");
 
 beforeEach(() => {
   return seed(testData);
