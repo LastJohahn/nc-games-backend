@@ -25,8 +25,8 @@ describe("GET /api/categories", () => {
     return request(app)
       .get("/api/categories")
       .expect(200)
-      .then((response) => {
-        expect(response.body.categories).toEqual([
+      .then(({ body }) => {
+        expect(body.categories).toEqual([
           {
             slug: "euro game",
             description: "Abstact games that involve little luck",
@@ -51,7 +51,6 @@ describe("GET /api/reviews/:review_id", () => {
       .get("/api/reviews/3")
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
         expect(typeof body).toBe("object");
         expect(body.review.review_id).toBe(3);
         expect(body.review).toHaveProperty("review_id");
