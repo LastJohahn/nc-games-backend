@@ -373,7 +373,6 @@ describe("GET /api", () => {
       .get("/api/")
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
         expect(body).toHaveProperty("endpoints");
         expect(body.endpoints).toHaveProperty("GET /api");
         expect(body.endpoints).toHaveProperty("GET /api/categories");
@@ -410,7 +409,7 @@ describe("GET /api/users", () => {
       .get("/api/users")
       .expect(200)
       .then(({ body }) => {
-        expect(body).toEqual(
+        expect(body.users).toEqual(
           expect.arrayContaining([
             expect.objectContaining({ username: "mallionaire" }),
             expect.objectContaining({ username: "philippaclaire9" }),
