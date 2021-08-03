@@ -427,9 +427,9 @@ describe("GET /api/users/:username", () => {
       .get("/api/users/dav3rid")
       .expect(200)
       .then(({ body }) => {
-        expect(body).toHaveProperty("username", "dav3rid");
-        expect(body).toHaveProperty("avatar_url");
-        expect(body).toHaveProperty("name", "dave");
+        expect(body.user).toHaveProperty("username", "dav3rid");
+        expect(body.user).toHaveProperty("avatar_url");
+        expect(body.user).toHaveProperty("name", "dave");
       });
   });
   test("status: 404 and a message stating wrong username if no username found with this id", () => {
