@@ -450,12 +450,13 @@ describe("PATCH /api/comments/:comment_id", () => {
       .send(newVotes)
       .expect(200)
       .then(({ body }) => {
-        expect(body.comment[0].comment_id).toBe(1);
-        expect(body.comment[0]).toHaveProperty("author");
-        expect(body.comment[0]).toHaveProperty("review_id");
-        expect(body.comment[0]).toHaveProperty("created_at");
-        expect(body.comment[0]).toHaveProperty("body");
-        expect(body.comment[0].votes).toBe(19);
+        console.log(body);
+        expect(body.comment.comment_id).toBe(1);
+        expect(body.comment).toHaveProperty("author");
+        expect(body.comment).toHaveProperty("review_id");
+        expect(body.comment).toHaveProperty("created_at");
+        expect(body.comment).toHaveProperty("body");
+        expect(body.comment.votes).toBe(19);
       });
   });
   test("status: 200 responds with the comment with all its native keys and the votes decreased if passed a negative integer", () => {
@@ -464,7 +465,7 @@ describe("PATCH /api/comments/:comment_id", () => {
       .patch("/api/comments/1")
       .send(newVotes)
       .then(({ body }) => {
-        expect(body.comment[0].votes).toBe(13);
+        expect(body.comment.votes).toBe(13);
       });
   });
   test("status: 200 responds with the updated comment even if unrelated info is sent along with inc_votes", () => {
@@ -473,7 +474,7 @@ describe("PATCH /api/comments/:comment_id", () => {
       .patch("/api/comments/1")
       .send(newVotes)
       .then(({ body }) => {
-        expect(body.comment[0].votes).toBe(20);
+        expect(body.comment.votes).toBe(20);
       });
   });
   test("status: 422 responds with a message indication that inc_votes is needed to update votes when passed a patch request without inc_votes", () => {
