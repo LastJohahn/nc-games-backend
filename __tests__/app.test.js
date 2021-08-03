@@ -373,18 +373,17 @@ describe("GET /api", () => {
       .get("/api/")
       .expect(200)
       .then(({ body }) => {
+        console.log(body);
         expect(body).toHaveProperty("endpoints");
-        expect(body.endpoints[0]).toHaveProperty("GET /api");
-        expect(body.endpoints[0]).toHaveProperty("GET /api/categories");
-        expect(body.endpoints[0]).toHaveProperty("GET /api/reviews");
-        expect(body.endpoints[0]).toHaveProperty("GET /api/reviews/:review_id");
-        expect(body.endpoints[0]).toHaveProperty(
-          "PATCH /api/reviews/:review_id"
-        );
-        expect(body.endpoints[0]).toHaveProperty(
+        expect(body.endpoints).toHaveProperty("GET /api");
+        expect(body.endpoints).toHaveProperty("GET /api/categories");
+        expect(body.endpoints).toHaveProperty("GET /api/reviews");
+        expect(body.endpoints).toHaveProperty("GET /api/reviews/:review_id");
+        expect(body.endpoints).toHaveProperty("PATCH /api/reviews/:review_id");
+        expect(body.endpoints).toHaveProperty(
           "GET /api/reviews/:review_id/comments"
         );
-        expect(body.endpoints[0]).toHaveProperty(
+        expect(body.endpoints).toHaveProperty(
           "POST /api/reviews/:review_id/comments"
         );
       });
