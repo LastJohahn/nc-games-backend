@@ -537,7 +537,15 @@ describe("POST api/reviews", () => {
       designer: "Klaus Teuber",
       category: "apple pie",
     };
-    return request(app).post("/api/reviews").send(reviewToSend).expect(422);
+    return request(app)
+      .post("/api/reviews")
+      .send(reviewToSend)
+      .expect(422)
+      .then(({ body }) => {
+        expect(body.msg).toBe(
+          "invalid category, please provide a valid category from the database"
+        );
+      });
   });
   test("status: 422 when passed an owner not in the users table", () => {
     const reviewToSend = {
