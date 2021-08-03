@@ -78,7 +78,7 @@ exports.selectReviewById = async (review_id) => {
   if (rows.length === 0) {
     return Promise.reject({ status: 404, msg: "Not found" });
   }
-  return rows;
+  return rows[0];
 };
 
 exports.selectCommentsByReviewId = async (review_id) => {
