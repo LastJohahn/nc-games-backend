@@ -51,19 +51,20 @@ describe("GET /api/reviews/:review_id", () => {
       .get("/api/reviews/3")
       .expect(200)
       .then(({ body }) => {
+        console.log(body);
         expect(typeof body).toBe("object");
-        expect(body.review[0].review_id).toBe(3);
-        expect(body.review[0]).toHaveProperty("review_id");
-        expect(body.review[0]).toHaveProperty("title");
-        expect(body.review[0]).toHaveProperty("review_body");
-        expect(body.review[0]).toHaveProperty("designer");
-        expect(body.review[0]).toHaveProperty("review_img_url");
-        expect(body.review[0]).toHaveProperty("votes");
-        expect(body.review[0]).toHaveProperty("category");
-        expect(body.review[0]).toHaveProperty("owner");
-        expect(body.review[0]).toHaveProperty("created_at");
-        expect(body.review[0]).toHaveProperty("comment_count");
-        expect(body.review[0].comment_count).toBe(3);
+        expect(body.review.review_id).toBe(3);
+        expect(body.review).toHaveProperty("review_id");
+        expect(body.review).toHaveProperty("title");
+        expect(body.review).toHaveProperty("review_body");
+        expect(body.review).toHaveProperty("designer");
+        expect(body.review).toHaveProperty("review_img_url");
+        expect(body.review).toHaveProperty("votes");
+        expect(body.review).toHaveProperty("category");
+        expect(body.review).toHaveProperty("owner");
+        expect(body.review).toHaveProperty("created_at");
+        expect(body.review).toHaveProperty("comment_count");
+        expect(body.review.comment_count).toBe(3);
       });
   });
   test("status: 400 responds with an invalid request parameter message if passed something that isn't a valid review id", () => {
