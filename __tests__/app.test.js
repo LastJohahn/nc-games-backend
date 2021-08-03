@@ -92,16 +92,16 @@ describe("PATCH /api/reviews/:review_id", () => {
       .send(newVotes)
       .expect(200)
       .then(({ body }) => {
-        expect(body.review[0].review_id).toBe(2);
-        expect(body.review[0]).toHaveProperty("review_id");
-        expect(body.review[0]).toHaveProperty("title");
-        expect(body.review[0]).toHaveProperty("review_body");
-        expect(body.review[0]).toHaveProperty("designer");
-        expect(body.review[0]).toHaveProperty("review_img_url");
-        expect(body.review[0]).toHaveProperty("votes");
-        expect(body.review[0]).toHaveProperty("category");
-        expect(body.review[0]).toHaveProperty("owner");
-        expect(body.review[0]).toHaveProperty("created_at");
+        expect(body.review.review_id).toBe(2);
+        expect(body.review).toHaveProperty("review_id");
+        expect(body.review).toHaveProperty("title");
+        expect(body.review).toHaveProperty("review_body");
+        expect(body.review).toHaveProperty("designer");
+        expect(body.review).toHaveProperty("review_img_url");
+        expect(body.review).toHaveProperty("votes");
+        expect(body.review).toHaveProperty("category");
+        expect(body.review).toHaveProperty("owner");
+        expect(body.review).toHaveProperty("created_at");
       });
   });
   test("status: 200 responds with a review object with the votes property increased by the number passed in the request if that number is positive", () => {
@@ -111,7 +111,7 @@ describe("PATCH /api/reviews/:review_id", () => {
       .send(newVotes)
       .expect(200)
       .then(({ body }) => {
-        expect(body.review[0].votes).toBe(8);
+        expect(body.review.votes).toBe(8);
       });
   });
   test("status: 200 responds with a review object with the votes property decreased by the number passed in the request if that number is negative", () => {
@@ -121,7 +121,7 @@ describe("PATCH /api/reviews/:review_id", () => {
       .send(newVotes)
       .expect(200)
       .then(({ body }) => {
-        expect(body.review[0].votes).toBe(4);
+        expect(body.review.votes).toBe(4);
       });
   });
   test("status: 200 responds with the updated review object even if unrelated info is sent along with inc_votes in the patch request", () => {
@@ -131,7 +131,7 @@ describe("PATCH /api/reviews/:review_id", () => {
       .send(newVotes)
       .expect(200)
       .then(({ body }) => {
-        expect(body.review[0].votes).toBe(9);
+        expect(body.review.votes).toBe(9);
       });
   });
   test("status: 422 responds with a message indication that inc_votes is needed to update votes when passed a patch request without inc_votes", () => {
