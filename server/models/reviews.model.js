@@ -118,7 +118,7 @@ exports.patchReviewVotesById = async (review_id, inc_votes) => {
   `,
     [inc_votes, review_id]
   );
-  return rows;
+  return rows[0];
 };
 
 exports.insertCommentByReviewId = async (review_id, comment_body) => {
