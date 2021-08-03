@@ -179,7 +179,7 @@ exports.insertReview = async (
       [title, review_body, designer, owner, category]
     )
   );
-  return rows;
+  return rows[0];
 };
 
 exports.deleteReview = async (review_id) => {
