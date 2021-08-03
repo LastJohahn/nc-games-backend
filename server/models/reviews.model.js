@@ -136,7 +136,7 @@ exports.insertCommentByReviewId = async (review_id, comment_body) => {
       [username, body, review_id]
     )
   );
-  return rows;
+  return rows[0];
 };
 
 exports.removeCommentByIdFromReviewId = async (comment_id) => {
