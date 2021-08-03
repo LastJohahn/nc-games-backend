@@ -450,7 +450,6 @@ describe("PATCH /api/comments/:comment_id", () => {
       .send(newVotes)
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
         expect(body.comment.comment_id).toBe(1);
         expect(body.comment).toHaveProperty("author");
         expect(body.comment).toHaveProperty("review_id");
@@ -515,16 +514,16 @@ describe("POST api/reviews", () => {
       .send(reviewToSend)
       .expect(201)
       .then(({ body }) => {
-        expect(body).toHaveProperty("review_id");
-        expect(body).toHaveProperty("owner");
-        expect(body).toHaveProperty("title");
-        expect(body).toHaveProperty("designer");
-        expect(body).toHaveProperty("category");
-        expect(body).toHaveProperty("review_body");
-        expect(body).toHaveProperty("created_at");
-        expect(body).toHaveProperty("votes");
-        expect(body.owner).toBe("dav3rid");
-        expect(body.review_body).toBe(
+        expect(body.review).toHaveProperty("review_id");
+        expect(body.review).toHaveProperty("owner");
+        expect(body.review).toHaveProperty("title");
+        expect(body.review).toHaveProperty("designer");
+        expect(body.review).toHaveProperty("category");
+        expect(body.review).toHaveProperty("review_body");
+        expect(body.review).toHaveProperty("created_at");
+        expect(body.review).toHaveProperty("votes");
+        expect(body.review.owner).toBe("dav3rid");
+        expect(body.review.review_body).toBe(
           "Catan needs no introduction, just trust me and start an evil sheep empire"
         );
       });
