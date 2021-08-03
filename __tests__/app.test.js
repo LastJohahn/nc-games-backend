@@ -499,7 +499,7 @@ describe("PATCH /api/comments/:comment_id", () => {
   });
 });
 
-describe("POST api/reviews", () => {
+describe("POST /api/reviews", () => {
   test("status: 201 responds with the posted review", () => {
     const reviewToSend = {
       owner: "dav3rid",
@@ -561,7 +561,6 @@ describe("POST api/reviews", () => {
       .send(reviewToSend)
       .expect(422)
       .then(({ body }) => {
-        console.log(body.msg);
         expect(body.msg).toBe(
           "Username not recognised, please provide a user from the database"
         );
@@ -581,8 +580,8 @@ describe("POST /api/categories", () => {
       .send(categoryToSend)
       .expect(201)
       .then(({ body }) => {
-        expect(body.slug).toBe("cat games");
-        expect(body.description).toBe(
+        expect(body.category.slug).toBe("cat games");
+        expect(body.category.description).toBe(
           "a game where you have to sit still for a long time and then pounce"
         );
       });
