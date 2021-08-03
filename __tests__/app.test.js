@@ -601,7 +601,12 @@ describe("DELETE /api/reviews/:review_id", () => {
       });
   });
   test("status: 400 bad request if passed something that isnt a valid review id", () => {
-    return request(app).delete("/api/reviews/applepie").expect(400);
+    return request(app)
+      .delete("/api/reviews/applepie")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid request parameter");
+      });
   });
 });
 
