@@ -7,6 +7,7 @@ const {
   handleCustomErrors,
   handleInvalidUsername,
   handleInvalidReviewId,
+  handleInvalidCategory,
 } = require("./server/controllers/errors.controller.js");
 const apiRouter = require("./server/routers/api.router.js");
 
@@ -22,6 +23,7 @@ app.all("/*", handleInvalidRouteErrors);
 app.use(handleCustomErrors);
 app.use(handleInvalidParam);
 app.use(handleInvalidUsername);
+app.use(handleInvalidCategory);
 app.use(handleInvalidReviewId);
 app.use(handleInternalServerError);
 

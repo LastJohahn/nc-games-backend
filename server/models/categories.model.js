@@ -27,5 +27,5 @@ exports.insertCategory = async (category_body) => {
       [slug, description]
     )
   );
-  return rows;
+  return rows[0];
 };

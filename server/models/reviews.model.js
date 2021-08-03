@@ -78,7 +78,7 @@ exports.selectReviewById = async (review_id) => {
   if (rows.length === 0) {
     return Promise.reject({ status: 404, msg: "Not found" });
   }
-  return rows;
+  return rows[0];
 };
 
 exports.selectCommentsByReviewId = async (review_id) => {
@@ -118,7 +118,7 @@ exports.patchReviewVotesById = async (review_id, inc_votes) => {
   `,
     [inc_votes, review_id]
   );
-  return rows;
+  return rows[0];
 };
 
 exports.insertCommentByReviewId = async (review_id, comment_body) => {
@@ -136,7 +136,7 @@ exports.insertCommentByReviewId = async (review_id, comment_body) => {
       [username, body, review_id]
     )
   );
-  return rows;
+  return rows[0];
 };
 
 exports.removeCommentByIdFromReviewId = async (comment_id) => {
@@ -179,7 +179,7 @@ exports.insertReview = async (
       [title, review_body, designer, owner, category]
     )
   );
-  return rows;
+  return rows[0];
 };
 
 exports.deleteReview = async (review_id) => {

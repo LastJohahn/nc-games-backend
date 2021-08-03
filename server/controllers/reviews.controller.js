@@ -68,8 +68,8 @@ exports.deleteCommentByIdFromReviewId = (req, res, next) => {
 exports.postReview = (req, res, next) => {
   const { owner, title, review_body, designer, category } = req.body;
   insertReview(owner, title, review_body, designer, category)
-    .then((comment) => {
-      res.status(201).send(comment[0]);
+    .then((review) => {
+      res.status(201).send({ review });
     })
     .catch(next);
 };
