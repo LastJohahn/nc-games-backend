@@ -314,14 +314,14 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .expect(201)
       .then(({ body }) => {
         const { comment } = body;
-        expect(comment[0]).toHaveProperty("comment_id");
-        expect(comment[0]).toHaveProperty("author");
-        expect(comment[0]).toHaveProperty("review_id");
-        expect(comment[0]).toHaveProperty("votes");
-        expect(comment[0]).toHaveProperty("created_at");
-        expect(comment[0]).toHaveProperty("body");
-        expect(comment[0].author).toBe("mallionaire");
-        expect(comment[0].body).toBe("I played Catan before it was cool!");
+        expect(comment).toHaveProperty("comment_id");
+        expect(comment).toHaveProperty("author");
+        expect(comment).toHaveProperty("review_id");
+        expect(comment).toHaveProperty("votes");
+        expect(comment).toHaveProperty("created_at");
+        expect(comment).toHaveProperty("body");
+        expect(comment.author).toBe("mallionaire");
+        expect(comment.body).toBe("I played Catan before it was cool!");
       });
   });
   test("status: 422 responds with an error message when trying to post a comment with a username that isn't in users", () => {
