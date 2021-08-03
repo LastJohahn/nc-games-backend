@@ -556,7 +556,16 @@ describe("POST api/reviews", () => {
       designer: "Klaus Teuber",
       category: "euro game",
     };
-    return request(app).post("/api/reviews").send(reviewToSend).expect(422);
+    return request(app)
+      .post("/api/reviews")
+      .send(reviewToSend)
+      .expect(422)
+      .then(({ body }) => {
+        console.log(body.msg);
+        expect(body.msg).toBe(
+          "Username not recognised, please provide a user from the database"
+        );
+      });
   });
 });
 
