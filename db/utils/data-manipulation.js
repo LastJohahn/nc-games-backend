@@ -1,3 +1,5 @@
+const { numberSanitiser } = require("./sanitisers.js");
+
 exports.keyReplacer = (commentObject, keyToReplace, newKey) => {
   const newCommentObject = {};
   Object.assign(newCommentObject, commentObject);
@@ -23,4 +25,14 @@ exports.idFetcher = (comments, referenceTable) => {
     return newComment;
   });
   return newCommentsWithId;
+};
+
+exports.offsetCalculator = (validLimit, p) => {
+  if (numberSanitiser(p) != "NaN") {
+    var validPage = numberSanitiser(p);
+  } else {
+    var validPage = "1";
+  }
+  const offset = ((parseInt(validPage) - 1) * parseInt(validLimit)).toString();
+  return offset;
 };

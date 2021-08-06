@@ -158,13 +158,12 @@ describe("PATCH /api/reviews/:review_id", () => {
   });
 });
 
-describe("GET /api/reviews?", () => {
-  test("status: 200 responds with a list of all reviews with their native keys when requested without queries", () => {
+describe("GET /api/reviews", () => {
+  test("status: 200 responds with a list of reviews with their native keys when requested without queries", () => {
     return request(app)
       .get("/api/reviews")
       .expect(200)
       .then(({ body }) => {
-        expect(body.reviews.length).toBe(13);
         for (let i = 0; i < body.reviews.length; i++) {
           expect(body.reviews[i]).toHaveProperty("review_id");
           expect(body.reviews[i]).toHaveProperty("title");
@@ -193,13 +192,49 @@ describe("GET /api/reviews?", () => {
         });
       });
   });
-  test("status: 200 if no sort_by query is passed in, default sorts by date descending", () => {
+
+  test("status: 200 reviews should be limited to 10 per page if no query is passed to amend limit", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.reviews.length).toBe(10);
+      });
+  });
+  test("status: 200 should be able to amend limit by passing in appropriate query", () => {
+    return request(app)
+      .get("/api/reviews?limit=11")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.reviews.length).toBe(11);
+      });
+  });
+  test("status: 400 should return error message if passed something that is not a number for limit", () => {
+    return request(app)
+      .get("/api/reviews?limit=fuuuu")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Please provide a valid limit query");
+      });
+  });
+  test("status: 200 should be able to pass in p query to get to subsequent pages of reviews beyond LIMIT", () => {
+    return request(app)
+      .get("/api/reviews?limit=5&sort_by=review_id&p=2&order=ASC")
+      .expect(200)
+      .then(({ body }) => {
+        const { reviews } = body;
+        expect(reviews[0].review_id).toBe(6);
+      });
+  });
+  test("status: 200 if no sort_by query is passed in, default sorts by date", () => {
+
     return request(app)
       .get("/api/reviews")
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
         expect(reviews).toBeSortedBy("created_at", { descending: true });
+
       });
   });
   test("status: 200 sorts by any valid column name if passed in as sort_by query", () => {
