@@ -4,7 +4,7 @@ exports.endpointsLister = (req, res, next) => {
       "GET /api":
         "You are here! As you can see, I display all available endpoints for this API.",
       "GET /api/categories": "I respond with all the categories on this API.",
-      "GET /api/reviews": `I will show you all the reviews on this API. By default, I sort by date posted in descending order, but please feel free to specify differently. I also filter by category if you tell me to! For this, please use the following queries: ?sort_by= [insert any valid column name] ?order=ASC/DESC ?category= [insert any valid category]`,
+      "GET /api/reviews": `I will show you all the reviews on this API. By default, I sort by date posted in descending order limited to 10 per page, but please feel free to specify differently. I also filter by category if you tell me to! For this, please use the following queries: ?sort_by= [insert any valid column name] ?order=ASC/DESC ?category= [insert any valid category], ?limit=[any number of reviews per page], ?p=[which page of reviews you want to be displayed]`,
       "GET /api/reviews/:review_id":
         "I will tell you all about one specific review, including how many comments it has gotten!",
       "PATCH /api/reviews/:review_id": `With me, you can alter the vote count for a specific review. To do this, please pass me an object in the following format: {inc_votes: [A positive integer n if you want to add n votes, a negative integer if you wish to remove them]}`,
