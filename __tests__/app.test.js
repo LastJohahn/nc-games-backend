@@ -385,6 +385,17 @@ describe("GET /api", () => {
         expect(body.endpoints).toHaveProperty(
           "POST /api/reviews/:review_id/comments"
         );
+        expect(body.endpoints).toHaveProperty(
+          "DELETE /api/comments/:comment_id"
+        );
+        expect(body.endpoints).toHaveProperty("GET /api/users");
+        expect(body.endpoints).toHaveProperty("GET /api/users/:username");
+        expect(body.endpoints).toHaveProperty(
+          "PATCH /api/comments/:comment_id"
+        );
+        expect(body.endpoints).toHaveProperty("POST /api/reviews");
+        expect(body.endpoints).toHaveProperty("POST /api/categories");
+        expect(body.endpoints).toHaveProperty("DELETE /api/reviews/:review_id");
       });
   });
 });
