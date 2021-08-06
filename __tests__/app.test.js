@@ -227,14 +227,12 @@ describe("GET /api/reviews", () => {
       });
   });
   test("status: 200 if no sort_by query is passed in, default sorts by date", () => {
-
     return request(app)
       .get("/api/reviews")
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
         expect(reviews).toBeSortedBy("created_at", { descending: true });
-
       });
   });
   test("status: 200 sorts by any valid column name if passed in as sort_by query", () => {
