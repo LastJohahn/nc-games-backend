@@ -3,7 +3,7 @@ const { seed } = require("../db/seeds/seed.js");
 const testData = require("../db/data/test-data/index.js");
 const db = require("../db/connection.js");
 const app = require("../app.js");
-const { response } = require("express");
+const { toBeSortedBy } = require("jest-sorted");
 
 beforeEach(() => {
   return seed(testData);
@@ -25,8 +25,8 @@ describe("GET /api/categories", () => {
     return request(app)
       .get("/api/categories")
       .expect(200)
-      .then((response) => {
-        expect(response.body.categories).toEqual([
+      .then(({ body }) => {
+        expect(body.categories).toEqual([
           {
             slug: "euro game",
             description: "Abstact games that involve little luck",
@@ -46,31 +46,24 @@ describe("GET /api/categories", () => {
 });
 
 describe("GET /api/reviews/:review_id", () => {
-  test("status: 200 responds with an object of the review at the correct id with all its native keys", () => {
-    return request(app)
-      .get("/api/reviews/2")
-      .expect(200)
-      .then(({ body }) => {
-        expect(typeof body).toBe("object");
-        expect(body.review[0].review_id).toBe(2);
-        expect(body.review[0]).toHaveProperty("review_id");
-        expect(body.review[0]).toHaveProperty("title");
-        expect(body.review[0]).toHaveProperty("review_body");
-        expect(body.review[0]).toHaveProperty("designer");
-        expect(body.review[0]).toHaveProperty("review_img_url");
-        expect(body.review[0]).toHaveProperty("votes");
-        expect(body.review[0]).toHaveProperty("category");
-        expect(body.review[0]).toHaveProperty("owner");
-        expect(body.review[0]).toHaveProperty("created_at");
-      });
-  });
-  test("status: 200 responds with the correct review with the additional key of comment_count, which represents the total count of all the comments with this review_id", () => {
+  test("status: 200 responds with an object of the review at the correct id with all its native keys and an additional key of comment_count", () => {
     return request(app)
       .get("/api/reviews/3")
       .expect(200)
       .then(({ body }) => {
-        expect(body.review[0]).toHaveProperty("comment_count");
-        expect(body.review[0].comment_count).toBe(3);
+        expect(typeof body).toBe("object");
+        expect(body.review.review_id).toBe(3);
+        expect(body.review).toHaveProperty("review_id");
+        expect(body.review).toHaveProperty("title");
+        expect(body.review).toHaveProperty("review_body");
+        expect(body.review).toHaveProperty("designer");
+        expect(body.review).toHaveProperty("review_img_url");
+        expect(body.review).toHaveProperty("votes");
+        expect(body.review).toHaveProperty("category");
+        expect(body.review).toHaveProperty("owner");
+        expect(body.review).toHaveProperty("created_at");
+        expect(body.review).toHaveProperty("comment_count");
+        expect(body.review.comment_count).toBe(3);
       });
   });
   test("status: 400 responds with an invalid request parameter message if passed something that isn't a valid review id", () => {
@@ -99,16 +92,16 @@ describe("PATCH /api/reviews/:review_id", () => {
       .send(newVotes)
       .expect(200)
       .then(({ body }) => {
-        expect(body.review[0].review_id).toBe(2);
-        expect(body.review[0]).toHaveProperty("review_id");
-        expect(body.review[0]).toHaveProperty("title");
-        expect(body.review[0]).toHaveProperty("review_body");
-        expect(body.review[0]).toHaveProperty("designer");
-        expect(body.review[0]).toHaveProperty("review_img_url");
-        expect(body.review[0]).toHaveProperty("votes");
-        expect(body.review[0]).toHaveProperty("category");
-        expect(body.review[0]).toHaveProperty("owner");
-        expect(body.review[0]).toHaveProperty("created_at");
+        expect(body.review.review_id).toBe(2);
+        expect(body.review).toHaveProperty("review_id");
+        expect(body.review).toHaveProperty("title");
+        expect(body.review).toHaveProperty("review_body");
+        expect(body.review).toHaveProperty("designer");
+        expect(body.review).toHaveProperty("review_img_url");
+        expect(body.review).toHaveProperty("votes");
+        expect(body.review).toHaveProperty("category");
+        expect(body.review).toHaveProperty("owner");
+        expect(body.review).toHaveProperty("created_at");
       });
   });
   test("status: 200 responds with a review object with the votes property increased by the number passed in the request if that number is positive", () => {
@@ -118,7 +111,7 @@ describe("PATCH /api/reviews/:review_id", () => {
       .send(newVotes)
       .expect(200)
       .then(({ body }) => {
-        expect(body.review[0].votes).toBe(8);
+        expect(body.review.votes).toBe(8);
       });
   });
   test("status: 200 responds with a review object with the votes property decreased by the number passed in the request if that number is negative", () => {
@@ -128,7 +121,7 @@ describe("PATCH /api/reviews/:review_id", () => {
       .send(newVotes)
       .expect(200)
       .then(({ body }) => {
-        expect(body.review[0].votes).toBe(4);
+        expect(body.review.votes).toBe(4);
       });
   });
   test("status: 200 responds with the updated review object even if unrelated info is sent along with inc_votes in the patch request", () => {
@@ -138,7 +131,7 @@ describe("PATCH /api/reviews/:review_id", () => {
       .send(newVotes)
       .expect(200)
       .then(({ body }) => {
-        expect(body.review[0].votes).toBe(9);
+        expect(body.review.votes).toBe(9);
       });
   });
   test("status: 422 responds with a message indication that inc_votes is needed to update votes when passed a patch request without inc_votes", () => {
@@ -199,6 +192,7 @@ describe("GET /api/reviews", () => {
         });
       });
   });
+
   test("status: 200 reviews should be limited to 10 per page if no query is passed to amend limit", () => {
     return request(app)
       .get("/api/reviews")
@@ -233,13 +227,14 @@ describe("GET /api/reviews", () => {
       });
   });
   test("status: 200 if no sort_by query is passed in, default sorts by date", () => {
+
     return request(app)
       .get("/api/reviews")
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
-        expect(reviews[0].review_id).toBe(7);
-        expect(reviews[5].review_id).toBe(9);
+        expect(reviews).toBeSortedBy("created_at", { descending: true });
+
       });
   });
   test("status: 200 sorts by any valid column name if passed in as sort_by query", () => {
@@ -248,18 +243,7 @@ describe("GET /api/reviews", () => {
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
-        expect(reviews[0].review_id).toBe(3);
-        expect(reviews[5].review_id).toBe(4);
-      });
-  });
-  test("status: 200 default sort order is descending if not specified", () => {
-    return request(app)
-      .get("/api/reviews")
-      .expect(200)
-      .then(({ body }) => {
-        const { reviews } = body;
-        expect(reviews[0].review_id).toBe(7);
-        expect(reviews[5].review_id).toBe(9);
+        expect(reviews).toBeSortedBy("designer");
       });
   });
   test("status: 200 can specify sort order to be ASC", () => {
@@ -268,18 +252,7 @@ describe("GET /api/reviews", () => {
       .expect(200)
       .then(({ body }) => {
         const { reviews } = body;
-        expect(reviews[0].review_id).toBe(13);
-        expect(reviews[5].review_id).toBe(9);
-      });
-  });
-  test("status: 200 can specify sort order to be DESC", () => {
-    return request(app)
-      .get("/api/reviews?order=DESC")
-      .expect(200)
-      .then(({ body }) => {
-        const { reviews } = body;
-        expect(reviews[0].review_id).toBe(7);
-        expect(reviews[5].review_id).toBe(9);
+        expect(reviews).toBeSortedBy("created_at");
       });
   });
   test("status: 200 accepts a valid column name for category and filters accordingly", () => {
@@ -376,14 +349,14 @@ describe("POST /api/reviews/:review_id/comments", () => {
       .expect(201)
       .then(({ body }) => {
         const { comment } = body;
-        expect(comment[0]).toHaveProperty("comment_id");
-        expect(comment[0]).toHaveProperty("author");
-        expect(comment[0]).toHaveProperty("review_id");
-        expect(comment[0]).toHaveProperty("votes");
-        expect(comment[0]).toHaveProperty("created_at");
-        expect(comment[0]).toHaveProperty("body");
-        expect(comment[0].author).toBe("mallionaire");
-        expect(comment[0].body).toBe("I played Catan before it was cool!");
+        expect(comment).toHaveProperty("comment_id");
+        expect(comment).toHaveProperty("author");
+        expect(comment).toHaveProperty("review_id");
+        expect(comment).toHaveProperty("votes");
+        expect(comment).toHaveProperty("created_at");
+        expect(comment).toHaveProperty("body");
+        expect(comment.author).toBe("mallionaire");
+        expect(comment.body).toBe("I played Catan before it was cool!");
       });
   });
   test("status: 422 responds with an error message when trying to post a comment with a username that isn't in users", () => {
@@ -436,19 +409,28 @@ describe("GET /api", () => {
       .expect(200)
       .then(({ body }) => {
         expect(body).toHaveProperty("endpoints");
-        expect(body.endpoints[0]).toHaveProperty("GET /api");
-        expect(body.endpoints[0]).toHaveProperty("GET /api/categories");
-        expect(body.endpoints[0]).toHaveProperty("GET /api/reviews");
-        expect(body.endpoints[0]).toHaveProperty("GET /api/reviews/:review_id");
-        expect(body.endpoints[0]).toHaveProperty(
-          "PATCH /api/reviews/:review_id"
-        );
-        expect(body.endpoints[0]).toHaveProperty(
+        expect(body.endpoints).toHaveProperty("GET /api");
+        expect(body.endpoints).toHaveProperty("GET /api/categories");
+        expect(body.endpoints).toHaveProperty("GET /api/reviews");
+        expect(body.endpoints).toHaveProperty("GET /api/reviews/:review_id");
+        expect(body.endpoints).toHaveProperty("PATCH /api/reviews/:review_id");
+        expect(body.endpoints).toHaveProperty(
           "GET /api/reviews/:review_id/comments"
         );
-        expect(body.endpoints[0]).toHaveProperty(
+        expect(body.endpoints).toHaveProperty(
           "POST /api/reviews/:review_id/comments"
         );
+        expect(body.endpoints).toHaveProperty(
+          "DELETE /api/comments/:comment_id"
+        );
+        expect(body.endpoints).toHaveProperty("GET /api/users");
+        expect(body.endpoints).toHaveProperty("GET /api/users/:username");
+        expect(body.endpoints).toHaveProperty(
+          "PATCH /api/comments/:comment_id"
+        );
+        expect(body.endpoints).toHaveProperty("POST /api/reviews");
+        expect(body.endpoints).toHaveProperty("POST /api/categories");
+        expect(body.endpoints).toHaveProperty("DELETE /api/reviews/:review_id");
       });
   });
 });
@@ -473,7 +455,7 @@ describe("GET /api/users", () => {
       .get("/api/users")
       .expect(200)
       .then(({ body }) => {
-        expect(body).toEqual(
+        expect(body.users).toEqual(
           expect.arrayContaining([
             expect.objectContaining({ username: "mallionaire" }),
             expect.objectContaining({ username: "philippaclaire9" }),
@@ -491,9 +473,9 @@ describe("GET /api/users/:username", () => {
       .get("/api/users/dav3rid")
       .expect(200)
       .then(({ body }) => {
-        expect(body).toHaveProperty("username", "dav3rid");
-        expect(body).toHaveProperty("avatar_url");
-        expect(body).toHaveProperty("name", "dave");
+        expect(body.user).toHaveProperty("username", "dav3rid");
+        expect(body.user).toHaveProperty("avatar_url");
+        expect(body.user).toHaveProperty("name", "dave");
       });
   });
   test("status: 404 and a message stating wrong username if no username found with this id", () => {
@@ -514,12 +496,12 @@ describe("PATCH /api/comments/:comment_id", () => {
       .send(newVotes)
       .expect(200)
       .then(({ body }) => {
-        expect(body.comment[0].comment_id).toBe(1);
-        expect(body.comment[0]).toHaveProperty("author");
-        expect(body.comment[0]).toHaveProperty("review_id");
-        expect(body.comment[0]).toHaveProperty("created_at");
-        expect(body.comment[0]).toHaveProperty("body");
-        expect(body.comment[0].votes).toBe(19);
+        expect(body.comment.comment_id).toBe(1);
+        expect(body.comment).toHaveProperty("author");
+        expect(body.comment).toHaveProperty("review_id");
+        expect(body.comment).toHaveProperty("created_at");
+        expect(body.comment).toHaveProperty("body");
+        expect(body.comment.votes).toBe(19);
       });
   });
   test("status: 200 responds with the comment with all its native keys and the votes decreased if passed a negative integer", () => {
@@ -528,7 +510,7 @@ describe("PATCH /api/comments/:comment_id", () => {
       .patch("/api/comments/1")
       .send(newVotes)
       .then(({ body }) => {
-        expect(body.comment[0].votes).toBe(13);
+        expect(body.comment.votes).toBe(13);
       });
   });
   test("status: 200 responds with the updated comment even if unrelated info is sent along with inc_votes", () => {
@@ -537,7 +519,7 @@ describe("PATCH /api/comments/:comment_id", () => {
       .patch("/api/comments/1")
       .send(newVotes)
       .then(({ body }) => {
-        expect(body.comment[0].votes).toBe(20);
+        expect(body.comment.votes).toBe(20);
       });
   });
   test("status: 422 responds with a message indication that inc_votes is needed to update votes when passed a patch request without inc_votes", () => {
@@ -556,6 +538,117 @@ describe("PATCH /api/comments/:comment_id", () => {
     return request(app)
       .patch("/api/comments/1")
       .send(newVotes)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid request parameter");
+      });
+  });
+});
+
+describe("POST /api/reviews", () => {
+  test("status: 201 responds with the posted review", () => {
+    const reviewToSend = {
+      owner: "dav3rid",
+      title: "the classic",
+      review_body:
+        "Catan needs no introduction, just trust me and start an evil sheep empire",
+      designer: "Klaus Teuber",
+      category: "euro game",
+    };
+    return request(app)
+      .post("/api/reviews")
+      .send(reviewToSend)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.review).toHaveProperty("review_id");
+        expect(body.review).toHaveProperty("owner");
+        expect(body.review).toHaveProperty("title");
+        expect(body.review).toHaveProperty("designer");
+        expect(body.review).toHaveProperty("category");
+        expect(body.review).toHaveProperty("review_body");
+        expect(body.review).toHaveProperty("created_at");
+        expect(body.review).toHaveProperty("votes");
+        expect(body.review.owner).toBe("dav3rid");
+        expect(body.review.review_body).toBe(
+          "Catan needs no introduction, just trust me and start an evil sheep empire"
+        );
+      });
+  });
+  test("status: 422 if not passed a valid category", () => {
+    const reviewToSend = {
+      owner: "dav3rid",
+      title: "the classic",
+      review_body:
+        "Catan needs no introduction, just trust me and start an evil sheep empire",
+      designer: "Klaus Teuber",
+      category: "apple pie",
+    };
+    return request(app)
+      .post("/api/reviews")
+      .send(reviewToSend)
+      .expect(422)
+      .then(({ body }) => {
+        expect(body.msg).toBe(
+          "invalid category, please provide a valid category from the database"
+        );
+      });
+  });
+  test("status: 422 when passed an owner not in the users table", () => {
+    const reviewToSend = {
+      owner: "daverid",
+      title: "the classic",
+      review_body:
+        "Catan needs no introduction, just trust me and start an evil sheep empire",
+      designer: "Klaus Teuber",
+      category: "euro game",
+    };
+    return request(app)
+      .post("/api/reviews")
+      .send(reviewToSend)
+      .expect(422)
+      .then(({ body }) => {
+        expect(body.msg).toBe(
+          "Username not recognised, please provide a user from the database"
+        );
+      });
+  });
+});
+
+describe("POST /api/categories", () => {
+  test("status: 201 and responds with the new category object", () => {
+    const categoryToSend = {
+      slug: "cat games",
+      description:
+        "a game where you have to sit still for a long time and then pounce",
+    };
+    return request(app)
+      .post("/api/categories")
+      .send(categoryToSend)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.category.slug).toBe("cat games");
+        expect(body.category.description).toBe(
+          "a game where you have to sit still for a long time and then pounce"
+        );
+      });
+  });
+});
+
+describe("DELETE /api/reviews/:review_id", () => {
+  test("status: 204 when a review has been deleted", () => {
+    return request(app).delete("/api/reviews/1").expect(204);
+  });
+  test("status: 422 and an error message when using a review id not associated with a review", () => {
+    return request(app)
+      .delete("/api/reviews/200000")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No review with this ID");
+      });
+  });
+  test("status: 400 bad request if passed something that isnt a valid review id", () => {
+    return request(app)
+      .delete("/api/reviews/applepie")
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid request parameter");

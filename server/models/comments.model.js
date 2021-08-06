@@ -16,5 +16,5 @@ exports.patchCommentVotesById = async (comment_id, inc_votes) => {
       `,
     [inc_votes, comment_id]
   );
-  return rows;
+  return rows[0];
 };

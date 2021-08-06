@@ -77,7 +77,7 @@ exports.selectReviewById = async (review_id) => {
   if (rows.length === 0) {
     return Promise.reject({ status: 404, msg: "Not found" });
   }
-  return rows;
+  return rows[0];
 };
 
 exports.selectCommentsByReviewId = async (review_id) => {
@@ -117,7 +117,7 @@ exports.patchReviewVotesById = async (review_id, inc_votes) => {
   `,
     [inc_votes, review_id]
   );
-  return rows;
+  return rows[0];
 };
 
 exports.insertCommentByReviewId = async (review_id, comment_body) => {
@@ -135,7 +135,7 @@ exports.insertCommentByReviewId = async (review_id, comment_body) => {
       [username, body, review_id]
     )
   );
-  return rows;
+  return rows[0];
 };
 
 exports.removeCommentByIdFromReviewId = async (comment_id) => {
@@ -157,4 +157,46 @@ exports.removeCommentByIdFromReviewId = async (comment_id) => {
       msg: "No comment found with this id",
     });
   }
+};
+
+exports.insertReview = async (
+  owner,
+  title,
+  review_body,
+  designer,
+  category
+) => {
+  const { rows } = await db.query(
+    format(
+      `
+      INSERT INTO reviews
+      (title, review_body, designer, owner, category, votes, review_img_url, created_at)
+      VALUES
+      (%L, DEFAULT, DEFAULT, DEFAULT)
+      RETURNING*;
+      `,
+      [title, review_body, designer, owner, category]
+    )
+  );
+  return rows[0];
+};
+
+exports.deleteReview = async (review_id) => {
+  const { rows } = await db.query(
+    format(
+      `
+      DELETE FROM reviews
+      WHERE review_id = %L
+      RETURNING*;
+      `,
+      [review_id]
+    )
+  );
+  if (rows.length === 0) {
+    return Promise.reject({
+      status: 404,
+      msg: "No review with this ID",
+    });
+  }
+  return rows;
 };
