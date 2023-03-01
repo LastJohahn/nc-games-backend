@@ -2,7 +2,7 @@
 
 ## Summary
 
-This is an API of games reviews, written as part of a [Northcoders Bootcamp](https://northcoders.com/), using `Node.js` (minimum version 15.8.0) and `PSQL` (minimum version 12.8), and polished up and completed after the end of the course. It runs very similar to any reddit-style API, allowing you to vote on comments etc. You can find the hosted version [here](https://nc-games-api-lastjohahn.herokuapp.com/api).
+This is an API of games reviews, written as part of a [Northcoders Bootcamp](https://northcoders.com/), using `Node.js` (minimum version 15.8.0) and `PSQL` (minimum version 12.8), and polished up and completed after the end of the course. It runs very similar to any reddit-style API, allowing you to vote on comments etc. You can find the hosted version [here](https://nc-games-backend-b7fc.onrender.com/api).
 
 ## Installation
 
